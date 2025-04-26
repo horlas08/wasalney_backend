@@ -1,0 +1,186 @@
+@font-face {
+  font-family: 'PanelIcons';
+  src:  url('fonts/PanelIcons.eot?9o5omq');
+  src:  url('fonts/PanelIcons.eot?9o5omq#iefix') format('embedded-opentype'),
+    url('fonts/PanelIcons.ttf?9o5omq') format('truetype'),
+    url('fonts/PanelIcons.woff?9o5omq') format('woff'),
+    url('fonts/PanelIcons.svg?9o5omq#PanelIcons') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="ic-"], [class*=" ic-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'PanelIcons' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ic-delete:before {
+  content: "\e932";
+}
+.ic-forward:before {
+  content: "\e933";
+}
+.ic-reply:before {
+  content: "\e934";
+}
+.ic-download:before {
+  content: "\e931";
+}
+.ic-pause:before {
+  content: "\e92f";
+}
+.ic-stop:before {
+  content: "\e930";
+}
+.ic-add-user:before {
+  content: "\e92d";
+}
+.ic-block:before {
+  content: "\e92e";
+}
+.ic-browser:before {
+  content: "\e92a";
+}
+.ic-ip:before {
+  content: "\e92b";
+}
+.ic-os:before {
+  content: "\e92c";
+}
+.ic-sending:before {
+  content: "\e927";
+}
+.ic-seen:before {
+  content: "\e928";
+}
+.ic-send1:before {
+  content: "\e929";
+}
+.ic-attach:before {
+  content: "\e922";
+}
+.ic-emoji:before {
+  content: "\e923";
+}
+.ic-mic:before {
+  content: "\e924";
+}
+.ic-move-to:before {
+  content: "\e925";
+}
+.ic-send:before {
+  content: "\e926";
+}
+.ic-settings:before {
+  content: "\e921";
+}
+.ic-close:before {
+  content: "\e920";
+}
+.ic-drag:before {
+  content: "\e91f";
+}
+.ic-archive:before {
+  content: "\e919";
+}
+.ic-audio:before {
+  content: "\e91a";
+}
+.ic-document:before {
+  content: "\e91b";
+}
+.ic-file:before {
+  content: "\e91c";
+}
+.ic-image:before {
+  content: "\e91d";
+}
+.ic-video:before {
+  content: "\e91e";
+}
+.ic-folder:before {
+  content: "\e917";
+}
+.ic-add2:before {
+  content: "\e918";
+}
+.ic-add:before {
+  content: "\e914";
+}
+.ic-gallery:before {
+  content: "\e915";
+}
+.ic-external-link:before {
+  content: "\e916";
+}
+.ic-password:before {
+  content: "\e913";
+}
+.ic-mobile:before {
+  content: "\e912";
+}
+.ic-playstore:before {
+  content: "\e910";
+}
+.ic-apple:before {
+  content: "\e911";
+}
+.ic-check:before {
+  content: "\e90d";
+}
+.ic-left:before {
+  content: "\e90e";
+}
+.ic-sun:before {
+  content: "\e90f";
+}
+.ic-menu:before {
+  content: "\e90c";
+}
+.ic-hover:before {
+  content: "\e90b";
+}
+.ic-search:before {
+  content: "\e90a";
+}
+.ic-dark:before {
+  content: "\e900";
+}
+.ic-down:before {
+  content: "\e901";
+}
+.ic-notify:before {
+  content: "\e902";
+}
+.ic-statistics:before {
+  content: "\e903";
+}
+.ic-home:before {
+  content: "\e904";
+}
+.ic-message:before {
+  content: "\e905";
+}
+.ic-user:before {
+  content: "\e906";
+}
+.ic-plug:before {
+  content: "\e907";
+}
+.ic-location:before {
+  content: "\e908";
+}
+.ic-question:before {
+  content: "\e909";
+}
