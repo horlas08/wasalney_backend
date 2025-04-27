@@ -9,9 +9,7 @@
 .env.backup
 .env.production
 .phpunit.result.cache
-*.apk
 Homestead.json
-/vendor
 Homestead.yaml
 auth.json
 npm-debug.log

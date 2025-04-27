@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="fa-IR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel</title>
+    <link rel="stylesheet" href="plugins/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="plugins/glightbox/glightbox.min.css">
+    <link rel="stylesheet" href="plugins/audioPlayer/audioplayer.css">
+    <link rel="stylesheet" href="icons/style.css">
+
+    <!-- Theme Colors -->
+    <style id="colors">
+        :root {
+            --primary: #4053BA;
+            --accent: #FF982E;
+            --primary-op: #4053ba21;
+            --background1: #F8F8F8;
+            --background2: #ffffff;
+            --color1: #474747;
+            --color2: #ffffff;
+            --color3: #7C7C7C;
+            --color4: #D3D3D3;
+            --hover1: #ffffff1a;
+            --hover2: #4053ba12;
+            --hover3: #4053ba0a;
+            --hover4: #ff982e1f;
+            --shadow1: 0px 4px 30px rgba(0, 0, 0, 0.03);
+            --shadow-accent: 0 5px 15px #ff982e3b;
+            --shadow-primary: 0 5px 15px #4053ba6b;
+        }
+    </style>
+
+    <!-- Plugins -->
+    <link rel="stylesheet" href="plugins/progresscircle/progresscircle.css">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <style>#sidebar-toggle{display: none;}</style>
+
+</head>
+
+<body>
+    <div id="sidebar" class="main-sidebar opened">
+        <div class="nav flex-column nav-pills menu-bar" id="menu-bar" role="tablist" aria-orientation="vertical">
+            <button class="menu-btn opened" id="menu-btn" onclick="changeMenuStyle()">
+                <div class="menu-bars">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span id="mbtn-label">مخفی کردن منو</span>
+            </button>
+            <button class="nav-link" id="v-home-tab" data-bs-toggle="pill" data-bs-target="#v-home" type="button" role="tab" aria-controls="v-home" aria-selected="false"><i class="ic-home"></i><span>صفحه اصلی</span></button>
+            <button class="nav-link active" id="v-messages-tab" data-bs-toggle="pill" data-bs-target="#v-messages" type="button" role="tab" aria-controls="v-messages" aria-selected="true"><i class="ic-message"></i><span>پیام ها</span></button>
+            <button class="nav-link" id="v-map-tab" data-bs-toggle="pill" data-bs-target="#v-map" type="button" role="tab" aria-controls="v-map" aria-selected="false"><i class="ic-location"></i><span>نقشه</span></button>
+            <button class="nav-link" id="v-users-tab" data-bs-toggle="pill" data-bs-target="#v-users" type="button" role="tab" aria-controls="v-users" aria-selected="false"><i class="ic-user"></i><span>مدیریت کاربران</span></button>
+            <button class="nav-link" id="v-statistics-tab" data-bs-toggle="pill" data-bs-target="#v-statistics" type="button" role="tab" aria-controls="v-statistics" aria-selected="false"><i class="ic-statistics"></i><span>آمار</span></button>
+            <button class="nav-link" id="v-plugins-tab" data-bs-toggle="pill" data-bs-target="#v-plugins" type="button" role="tab" aria-controls="v-plugins" aria-selected="false"><i class="ic-plug"></i><span>افزودنی ها</span></button>  
+            <div class="bottom-bar">
+              <button onclick="changeStyle()"><i id="cs-icon" class="ic-dark"></i></button>
+              <a href="#"><i class="ic-question"></i></a>
+            </div>
+        </div>
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane" id="v-home" role="tabpanel" aria-labelledby="v-home-tab" tabindex="0">
+                <div class="sidebar-logo">
+                    <a href="#">
+                        <img class="d-dark-none" src="images/logo.png" alt="">
+                        <img class="d-light-none" src="images/logo-light.png" alt="">
+                    </a>
+                </div>
+                <form class="sidebar-search">
+                    <input type="text" placeholder="جستجو ...">
+                </form>
+                <nav class="navbar navbar-expand-lg">
+                    <div class="collapse navbar-collapse" id="navbarScroll">
+                        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll"
+                            style="--bs-scroll-height: 100px;">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <img src="icons/menu/dashboard.png" alt="">
+                                    <i class="ic-message"></i>
+                                    داشبورد
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">صفحه اصلی</a></li>
+                                    <li><a class="dropdown-item" href="#">آمار</a></li>
+                                    <li><a class="dropdown-item" href="#">بروزرسانی ها</a></li>
+                                    <li class="ol-hover"><a class="dropdown-item" href="#">تنظیمات پنل</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="#1">ویرایش ویجت ها</a></li>
+                                            <li><a href="#2">تغییر رنگ</a></li>
+                                            <li><a href="#3">ریست تنظیمات</a></li>
+                                            <li><a href="#1">ویرایش ویجت ها</a>
+                                                <ul class="sub-menu">
+                                                    <li><a href="#1">ویرایش ویجت ها</a></li>
+                                                    <li><a href="#2">تغییر رنگ</a>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">مدیریت فایل ها</a></li>
+                                    <li><a class="dropdown-item" href="#">ویرایش رمزعبور</a></li>
+                                    <li><a class="dropdown-item" href="#">اطلاعیه ها</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <img src="icons/menu/website.png" alt="">
+                                    <i class="ic-dark"></i>
+                                    مدیریت وبسایت ها
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <img src="icons/menu/profile.png" alt="">
+                                    <i class="ic-home"></i>
+                                    تنظیمات پروفایل
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <img src="icons/menu/notify.png" alt="">
+                                    <i class="ic-location"></i>
+                                    اعلان ها
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <img src="icons/menu/upgrade.png" alt="">
+                                    <i class="ic-notify"></i>
+                                    ارتقاء حساب کاربری
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <img src="icons/menu/transactions.png" alt="">
+                                    <i class="ic-plug"></i>
+                                    صورت حساب ها
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <img src="icons/menu/help.png" alt="">
+                                    <i class="ic-question"></i>
+                                    راهنمای استفاده
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <img src="icons/menu/documents.png" alt="">
+                                    <i class="ic-statistics"></i>
+                                    مستندات فنی
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+            </div>
+            <div class="tab-pane show active" id="v-messages" role="tabpanel" aria-labelledby="v-messages-tab"
+                tabindex="0">
+                <ul class="nav nav-pills" id="messages-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="msg-all-tab" data-bs-toggle="pill" data-bs-target="#msg-all"
+                            type="button" role="tab" aria-controls="msg-all" aria-selected="true">همه</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="msg-unread-tab" data-bs-toggle="pill" data-bs-target="#msg-unread"
+                            type="button" role="tab" aria-controls="msg-unread" aria-selected="false">خوانده
+                            نشده</button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="msg-all" role="tabpanel" aria-labelledby="msg-all-tab"
+                        tabindex="0">
+                        <form class="sidebar-search">
+                            <input type="text" placeholder="جستجو ...">
+                        </form>
+                        <ul class="contact-list">
+                            <li><a href="chats.html" class="contact-item">
+                                    <img src="images/avatar/image 1.png" alt="">
+                                    <strong>کاربر شماره 1</strong>
+                                    <span>لورم ایپسوم متن ساختگی ...</span>
+                                </a></li>
+                            <li><a href="chats.html" class="contact-item selected">
+                                    <img src="images/avatar/image 2.png" alt="">
+                                    <strong>کاربر شماره 2</strong>
+                                    <span>لورم ایپسوم متن ساختگی ...</span>
+                                </a></li>
+                            <li><a href="chats.html" class="contact-item online">
+                                    <img src="images/avatar/image 3.png" alt="">
+                                    <strong>کاربر شماره 3</strong>
+                                    <span>لورم ایپسوم متن ساختگی ...</span>
+                                </a></li>
+                            <li><a href="chats.html" class="contact-item online">
+                                    <img src="images/avatar/image 4.png" alt="">
+                                    <strong>کاربر شماره 4</strong>
+                                    <span>لورم ایپسوم متن ساختگی ...</span>
+                                </a></li>
+                            <li><a href="chats.html" class="contact-item">
+                                    <img src="images/avatar/image 1.png" alt="">
+                                    <strong>کاربر شماره 1</strong>
+                                    <span>لورم ایپسوم متن ساختگی ...</span>
+                                </a></li>
+                            <li><a href="chats.html" class="contact-item">
+                                    <img src="images/avatar/image 2.png" alt="">
+                                    <strong>کاربر شماره 2</strong>
+                                    <span>لورم ایپسوم متن ساختگی ...</span>
+                                </a></li>
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="msg-unread" role="tabpanel" aria-labelledby="msg-unread-tab"
+                        tabindex="0">
+                        <form class="sidebar-search">
+                            <input type="text" placeholder="جستجو ...">
+                        </form>
+                        <div class="chat-list-empty">
+                            <i class="ic-message"></i>
+                            <span>موردی برای نمایش وجود ندارد !</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="v-map" role="tabpanel" aria-labelledby="v-map-tab" tabindex="0">Map</div>
+            <div class="tab-pane" id="v-users" role="tabpanel" aria-labelledby="v-users-tab" tabindex="0">users
+            </div>
+            <div class="tab-pane" id="v-statistics" role="tabpanel" aria-labelledby="v-statistics-tab" tabindex="0">
+                statistics</div>
+            <div class="tab-pane" id="v-plugins" role="tabpanel" aria-labelledby="v-plugins-tab" tabindex="0">Plugins
+            </div>
+        </div>
+        <button id="sidebar-toggle" class="sidebar-toggle opened" onclick="changeMenuStyle()"><i
+                class="ic-down"></i></button>
+    </div>
+    <div id="main-content" class="main-content menu-opened">
+        <header class="chat-page">
+            <div class="profile-name" onclick="openChatInfo()">
+                <img src="images/avatar/image 2.png" alt="">
+                <strong>بازدیدکننده شماره 15</strong>
+                <span>آخرین بازدید در 12 شهریور 1401 - ساعت 10 : 25</span>
+            </div>
+            <button class="move-to" data-bs-target="#forward-chat" data-bs-toggle="modal">
+                <i class="ic-move-to"></i>
+                ارجاء دادن به...
+            </button>
+        </header>
+        <div class="messages">
+            <main class="messages-container">
+                <!-- Messages Menu -->
+                <div class="msg-menu">
+                    <ul>
+                        <li><a href="#"><i class="ic-reply"></i>پاسخ دادن</a></li>
+                        <li><a href="#"><i class="ic-download"></i>دانلود</a></li>
+                        <li><a href="#"><i class="ic-forward"></i>فرستادن به...</a></li>
+                        <li><a href="#"><i class="ic-delete"></i>حذف</a></li>
+                    </ul>
+                </div>
+
+                <!-- Messages Content -->
+                <div class="msg your-message">
+                  <div class="msg-img" style="background-image: url(https://i.pravatar.cc/150?img=13)"></div>
+                  <div class="msg-bubble">
+                    <i class="ic-menu msg-menu-btn"></i>
+                    <div class="msg-text">
+                      سلام
+                    </div>
+                    <div class="msg-status">
+                        <i class="ic-sending"></i>
+                        <span class="time">10 : 33</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="msg your-message">
+                    <div class="msg-img" style="background-image: url(https://i.pravatar.cc/150?img=13)"></div>
+                    <div class="msg-bubble">
+                        <i class="ic-menu msg-menu-btn"></i>
+                      <div class="msg-text">
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. 
+                      </div>
+                      <div class="msg-status">
+                          <i class="ic-seen"></i>
+                          <span class="time">10 : 33</span>
+                      </div>
+                    </div>
+                </div>
+                <div class="msg date-and-info"><span>23 فروردین 1403</span></div>
+                <div class="msg user-message">
+                    <div class="msg-img" style="background-image: url(https://i.pravatar.cc/150?img=12)"></div>
+                    <div class="msg-bubble">
+                      <div class="msg-text">
+                          سلام
+                      </div>
+                      <div class="msg-status">
+                          <span class="time">10 : 33</span>
+                      </div>
+                    </div>
+                  </div>  
+                <div class="msg user-message">
+                  <div class="msg-img" style="background-image: url(https://i.pravatar.cc/150?img=12)"></div>
+                  <div class="msg-bubble">
+                    <div class="msg-text">
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. 
+                    </div>
+                    <div class="msg-status">
+                        <span class="time">10 : 33</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="msg your-message">
+                    <div class="msg-img" style="background-image: url(https://i.pravatar.cc/150?img=13)"></div>
+                    <div class="msg-bubble image download">
+                      <img src="images/gallery/01.jpg" alt="">
+                      <div class="file-size">
+                          <i class="ic-download"></i>
+                          <span>512 KB</span>
+                      </div>
+                      <div class="msg-status">
+                          <i class="ic-seen"></i>
+                          <span class="time">10 : 33</span>
+                      </div>
+                    </div>
+                </div>
+                <div class="msg your-message">
+                    <div class="msg-img" style="background-image: url(https://i.pravatar.cc/150?img=13)"></div>
+                    <div class="msg-bubble image downloading">
+                      <img src="images/gallery/02.jpg" alt="">
+                      <div class="file-size">
+                        <svg class="spinner" viewBox="0 0 50 50">
+                            <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+                          </svg>
+                          <span>1.5 / 2.3 MB</span>
+                      </div>
+                      <div class="msg-status">
+                          <i class="ic-seen"></i>
+                          <span class="time">10 : 33</span>
+                      </div>
+                    </div>
+                </div>
+                <div class="msg your-message">
+                    <div class="msg-img" style="background-image: url(https://i.pravatar.cc/150?img=13)"></div>
+                    <div class="msg-bubble image downloaded">
+                        <i class="ic-menu msg-menu-btn"></i>
+                      <a href="images/gallery/03.jpg" class="glightbox"><img src="images/gallery/03.jpg" alt=""></a>
+                      <div class="msg-status">
+                          <i class="ic-seen"></i>
+                          <span class="time">10 : 33</span>
+                      </div>
+                    </div>
+                </div>
+                <div class="msg user-message">
+                    <div class="msg-img" style="background-image: url(https://i.pravatar.cc/150?img=12)"></div>
+                    <div class="msg-bubble audio">
+                        <audio preload="auto" controls>
+                            <source src="images/00.mp3">
+                        </audio>
+                      <div class="msg-status">
+                          <span class="time">10 : 33</span>
+                      </div>
+                    </div>
+                  </div>
+              </main>
+            <div class="message-form">
+                <form action="#" class="message-input">
+                    <div id="msg-input" class="msg-input" contenteditable="true" placeholder="پیامتان را تایپ کنید و اینتــر را بزنید ...">
+                        <input type="hidden" id="msg-message" class="msg-message">
+                    </div>
+                    <button class="send-message" id="msg-submit" type="submit"><i class="ic-send"></i></button>
+                    <div class="msg-attachments">
+                        <label for="msg-atch-file"><i class="ic-attach"></i>پیوست فایل</label>
+                        <input class="file-input" type="file" name="files[]" id="msg-atch-file" multiple="">
+                    </div>
+                </form>
+                <button class="record-btn" id="record_btn"><i class="ic-mic"></i></button>
+                <i class="ic-emoji select-emoji"></i>
+                <div class="emojibox">
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😀');">😀</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😂');">😂</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😍');">😍</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😎');">😎</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😊');">😊</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😶');">😶</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😐');">😐</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('☹️');">☹️</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😦');">😦</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😭');">😭</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('🗿');">🗿</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('👍');">👍</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('👌');">👌</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('🙏');">🙏</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('🖕');">🖕</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('❤️');">❤️</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('🤬');">🤬</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('🤕');">🤕</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('😨');">😨</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('🖐️');">🖐️</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('✌️');">✌️</button>
+                    <button onclick="document.getElementById('msg-input').focus(); insertContent('💩');">💩</button>
+                </div>
+                <div class="record-box">
+                    <button id="stop_record"><i class="ic-stop"></i></button>
+                    <button id="pause_record"><i class="ic-pause"></i></button>
+                    <button id="cancel_record"><i class="ic-close"></i></button>
+                    <span id="record_time">00 : 01 : 23</span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-info" id="chat-info">
+            <div class="user-info">
+                <a href="images/avatar/image%204.png" class="glightbox"><img class="ui-avatar" src="images/avatar/image%204.png" alt=""></a>
+                <strong class="ui-name">کاربر شماره 5</strong>
+                <span class="ui-number">+98 123456789</span>
+            </div>
+            <div class="ci-buttons">
+                <button><i class="ic-add-user"></i>افزودن به مخاطبین</button>
+                <button><i class="ic-block"></i>مسدود کردن</button>
+            </div>
+            <div class="ci-divider"></div>
+            <div class="user-ip-info ci-box">
+                <ul>
+                    <li>
+                        <div class="label">
+                            <i class="ic-location"></i>
+                            <span>موقعیت :</span>
+                        </div>
+                        <div class="value">
+                            <strong>ایران</strong>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="label">
+                            <i class="ic-ip"></i>
+                            <span>آی پی :</span>
+                        </div>
+                        <div class="value">
+                            <strong>185.237.85.9</strong>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="label">
+                            <i class="ic-os"></i>
+                            <span>سیستم عامل :</span>
+                        </div>
+                        <div class="value">
+                            <strong>ویندوز 11</strong>
+                            <img src="images/os.png" alt="">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="label">
+                            <i class="ic-browser"></i>
+                            <span>مرورگر :</span>
+                        </div>
+                        <div class="value">
+                            <strong>Chrome</strong>
+                            <img src="images/browser.png" alt="">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="label">
+                            <i class="ic-sending"></i>
+                            <span>منطقه زمانی :</span>
+                        </div>
+                        <div class="value">
+                            <strong>08:30 (UTC8)</strong>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forward Message -->
+    <div class="modal fade" id="forward-chat" aria-hidden="true" aria-labelledby="forward-chat-label" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="forward-title">
+                <i class="ic-move-to"></i>
+                <span>ارجاع دادن پیام ها</span>
+                <button type="button" class="btn-close icp-close" data-bs-dismiss="modal" aria-label="بستن"></button>
+            </div>
+            <div class="forward-list">
+                <ul class="contact-list">
+                    <li><a href="chats.html" class="contact-item">
+                            <img src="images/avatar/image 1.png" alt="">
+                            <strong>کاربر شماره 1</strong>
+                            <span>لورم ایپسوم متن ساختگی ...</span>
+                        </a></li>
+                    <li><a href="chats.html" class="contact-item">
+                            <img src="images/avatar/image 2.png" alt="">
+                            <strong>کاربر شماره 2</strong>
+                            <span>لورم ایپسوم متن ساختگی ...</span>
+                        </a></li>
+                    <li><a href="chats.html" class="contact-item online">
+                            <img src="images/avatar/image 3.png" alt="">
+                            <strong>کاربر شماره 3</strong>
+                            <span>لورم ایپسوم متن ساختگی ...</span>
+                        </a></li>
+                    <li><a href="chats.html" class="contact-item">
+                            <img src="images/avatar/image 4.png" alt="">
+                            <strong>کاربر شماره 4</strong>
+                            <span>لورم ایپسوم متن ساختگی ...</span>
+                        </a></li>
+                </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="transparent-overlay"></div>
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <script src="plugins/bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="plugins/recorder/recorder.js"></script>
+    <script src="plugins/glightbox/glightbox.min.js"></script>
+    <script src="plugins/audioPlayer/audioplayer.js"></script>
+
+    <!-- Main Scripts -->
+    <script src="scripts/main.js"></script>
+    <script src="scripts/chat.js"></script>
+</body>
+
+</html>

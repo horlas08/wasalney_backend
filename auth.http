@@ -1,0 +1,13 @@
+POST http://localhost:8000/api/v1/getServices
+
+
+username = 99 &
+password = new-element
+
+###
+### GET request to example server
+POST http://localhost:8000/api/v1/getServices
+
+
+
+###
