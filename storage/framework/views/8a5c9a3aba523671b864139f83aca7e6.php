@@ -64,4 +64,4 @@
     </footer>
 </body>
 </html>
-<?php /**PATH /home/qozeem/projects/web/wasalney/laravel/resources/views/theme/home.blade.php ENDPATH**/ ?>
+<?php /**PATH /www/wwwroot/wasalney.test/resources/views/theme/home.blade.php ENDPATH**/ ?>

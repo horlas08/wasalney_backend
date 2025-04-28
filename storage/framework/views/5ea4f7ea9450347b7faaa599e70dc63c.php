@@ -36,4 +36,4 @@
         </div>
     </body>
 </html>
-<?php /**PATH /home/qozeem/projects/web/wasalney/resources/views/errors/minimal.blade.php ENDPATH**/ ?>
+<?php /**PATH /www/wwwroot/wasalney.test/resources/views/errors/minimal.blade.php ENDPATH**/ ?>
