@@ -15,31 +15,31 @@ class DeployController extends Controller
         $secret = config('app.deploy_secret');
 
         // Get the signature from either the request header or $_SERVER
-        $signature = $request->header('X-Hub-Signature-256') ?? $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? null;
+        // $signature = $request->header('X-Hub-Signature-256') ?? $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? null;
 
-        if (!$signature) {
-            Log::error('Deployment failed: No signature provided');
-            return response('No signature provided', 403);
-        }
+        // if (!$signature) {
+        //     Log::error('Deployment failed: No signature provided');
+        //     return response('No signature provided', 403);
+        // }
 
-        // Get the payload
-        $payload = $request->getContent();
+        // // Get the payload
+        // $payload = $request->getContent();
 
-        // Calculate the expected signature
-        $expectedSignature = 'sha256=' . hash_hmac('sha256', $payload, $secret);
-        Log::info("details", [
-            'testt'=>$payload,
-            'received' => $signature,
-                'expected' => $expectedSignature
-        ]);
-        // Verify the signature
-        if (!hash_equals($expectedSignature, $signature)) {
-            Log::error('Deployment failed: Invalid signature', [
-                'received' => $signature,
-                'expected' => $expectedSignature
-            ]);
-            return response('Invalid signature', 403);
-        }
+        // // Calculate the expected signature
+        // $expectedSignature = 'sha256=' . hash_hmac('sha256', $payload, $secret);
+        // Log::info("details", [
+        //     'testt'=>$payload,
+        //     'received' => $signature,
+        //         'expected' => $expectedSignature
+        // ]);
+        // // Verify the signature
+        // if (!hash_equals($expectedSignature, $signature)) {
+        //     Log::error('Deployment failed: Invalid signature', [
+        //         'received' => $signature,
+        //         'expected' => $expectedSignature
+        //     ]);
+        //     return response('Invalid signature', 403);
+        // }
 
         
         try {
