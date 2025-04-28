@@ -45,8 +45,10 @@ class DeployController extends Controller
         try {
             // Get the project path from config
             $projectPath = base_path();
-
+            
+            
             // Execute git pull
+            $output = [];
             exec("cd {$projectPath} && git pull 2>&1", $output, $returnCode);
 
             if ($returnCode !== 0) {
