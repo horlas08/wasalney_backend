@@ -27,7 +27,11 @@ class DeployController extends Controller
 
         // Calculate the expected signature
         $expectedSignature = 'sha256=' . hash_hmac('sha256', $payload, $secret);
-
+        Log::info("details", [
+            'testt'=>$payload,
+            'received' => $signature,
+                'expected' => $expectedSignature
+        ]);
         // Verify the signature
         if (!hash_equals($expectedSignature, $signature)) {
             Log::error('Deployment failed: Invalid signature', [
