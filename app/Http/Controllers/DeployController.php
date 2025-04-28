@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Process;
 
 class DeployController extends Controller
 {
@@ -46,25 +47,22 @@ class DeployController extends Controller
             // Get the project path from config
             $projectPath = base_path();
 
+            // Execute git pull using Process facade
+            $process = Process::path($projectPath)
+                ->run('git pull');
 
-            // Execute git pull
-            $output = [];
-            \exec("cd {$projectPath} && git pull 2>&1", $output, $returnCode);
-
-            if ($returnCode !== 0) {
-                Log::error('Deployment failed: Git pull failed', ['output' => $output]);
-                return response('Git pull failed: ' . \implode("\n", $output), 500);
+            if (!$process->successful()) {
+                Log::error('Deployment failed: Git pull failed', ['output' => $process->output()]);
+                return response('Git pull failed: ' . $process->output(), 500);
             }
 
             // Clear Laravel cache
-            \Artisan::call('cache:clear');
+            Artisan::call('cache:clear');
+            Artisan::call('config:clear');
+            Artisan::call('view:clear');
 
-        
-            \Artisan::call('config:clear');
-            \Artisan::call('view:clear');
-
-            Log::info('Deployment successful', ['output' => $output]);
-            return response('Deployment successful: ' . implode("\n", $output));
+            Log::info('Deployment successful', ['output' => $process->output()]);
+            return response('Deployment successful: ' . $process->output());
         } catch (\Exception $e) {
             Log::error('Deployment failed: ' . $e->getMessage());
             return response('Deployment failed: ' . $e->getMessage(), 500);
