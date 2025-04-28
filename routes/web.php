@@ -9,10 +9,14 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use \App\Http\Controllers\UserController;
 use \App\Http\Controllers\FileController;
+use App\Http\Controllers\DeployController;
 use \App\Http\Controllers\RouteController;
 use \App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+
+
+Route::post('/deploy', [DeployController::class, 'handle']);
 
 Route::get('/send-notifi', function () {
 //    $data = [
@@ -167,14 +171,3 @@ Route::get('/{firstValue}',[RouteController::class,'firstUrl'])->name('firstUrl'
 Route::get('/{firstValue}/{secondValue}',[RouteController::class,'secondUrl'])->name('secondUrl');
 
 Route::get('/{firstValue}/{secondValue}/{thirdValue}',[RouteController::class,'thirdUrl'])->name('thirdUrl');
-
-
-
-
-
-
-
-
-
-
-
