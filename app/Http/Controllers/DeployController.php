@@ -41,31 +41,30 @@ class DeployController extends Controller
         //     return response('Invalid signature', 403);
         // }
 
-        
+
         try {
             // Get the project path from config
             $projectPath = base_path();
-            
-            
+
+
             // Execute git pull
             $output = [];
-            exec("cd {$projectPath} && git pull 2>&1", $output, $returnCode);
+            \exec("cd {$projectPath} && git pull 2>&1", $output, $returnCode);
 
             if ($returnCode !== 0) {
                 Log::error('Deployment failed: Git pull failed', ['output' => $output]);
-                return response('Git pull failed: ' . implode("\n", $output), 500);
+                return response('Git pull failed: ' . \implode("\n", $output), 500);
             }
 
             // Clear Laravel cache
             \Artisan::call('cache:clear');
 
-            
+
             \Artisan::call('config:clear');
             \Artisan::call('view:clear');
 
             Log::info('Deployment successful', ['output' => $output]);
             return response('Deployment successful: ' . implode("\n", $output));
-
         } catch (\Exception $e) {
             Log::error('Deployment failed: ' . $e->getMessage());
             return response('Deployment failed: ' . $e->getMessage(), 500);
