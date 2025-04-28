@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('airport_bookings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreignId('service_type_id')->constrained('airport_service_types');
+            $table->unsignedBigInteger('service_type_id');
+            $table->foreign('service_type_id')->references('id')->on('airport_service_types');
             $table->foreignId('driver_id')->nullable()->constrained('ar_drivers');
             $table->enum('booking_type', ['ONE_WAY', 'ARRIVAL', 'ROUND_TRIP']);
             $table->string('pickup_location');
@@ -36,6 +37,10 @@ return new class extends Migration
 
     public function down()
     {
+        Schema::table('airport_bookings', function (Blueprint $table) {
+            $table->dropForeign(['service_type_id']);
+            $table->dropForeign(['driver_id']);
+        });
         Schema::dropIfExists('airport_bookings');
     }
 };
