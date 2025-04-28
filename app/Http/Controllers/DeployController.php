@@ -47,10 +47,26 @@ class DeployController extends Controller
             // Get the project path from config
             $projectPath = base_path();
 
+<<<<<<< HEAD
             // Execute git pull using Process facade
             $process = Process::path($projectPath)
                 ->run('git pull');
 
+=======
+            // First check if git repository is healthy
+            $checkProcess = Process::path($projectPath)
+                ->run('git fsck --full');
+
+            if (!$checkProcess->successful()) {
+                Log::error('Git repository is corrupted', ['output' => $checkProcess->output()]);
+                return response('Git repository is corrupted. Please fix the repository manually.', 500);
+            }
+
+            // Execute git pull using Process facade
+            $process = Process::path($projectPath)
+                ->run('git pull');
+
+>>>>>>> 8180a75 (ddd)
             if (!$process->successful()) {
                 Log::error('Deployment failed: Git pull failed', ['output' => $process->output()]);
                 return response('Git pull failed: ' . $process->output(), 500);
