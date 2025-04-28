@@ -59,9 +59,7 @@ class DeployController extends Controller
             // Clear Laravel cache
             \Artisan::call('cache:clear');
 
-
-            
-
+        
             \Artisan::call('config:clear');
             \Artisan::call('view:clear');
 
