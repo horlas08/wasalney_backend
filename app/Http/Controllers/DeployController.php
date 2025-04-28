@@ -60,6 +60,8 @@ class DeployController extends Controller
             \Artisan::call('cache:clear');
 
 
+            
+
             \Artisan::call('config:clear');
             \Artisan::call('view:clear');
 
