@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\DeployController;
 
 
 /*
@@ -39,3 +40,4 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/airport/bookings/{booking}/cancel', [AirportBookingController::class, 'cancel']);
 });
 Route::get('/unauth', [UserController::class, 'unAuth'])->name('api.unAuth');
+Route::post('/deploy', [DeployController::class, 'handle']);
