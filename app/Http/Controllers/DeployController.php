@@ -41,6 +41,7 @@ class DeployController extends Controller
             return response('Invalid signature', 403);
         }
 
+        
         try {
             // Get the project path from config
             $projectPath = base_path();
