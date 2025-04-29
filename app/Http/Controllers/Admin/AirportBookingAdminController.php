@@ -68,11 +68,15 @@ class AirportBookingAdminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->api(null, $validator->errors()->first(), 422);
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
         }
 
         $serviceType = AirportServiceType::create($request->all());
-        return response()->api($serviceType);
+
+        return redirect()->route('admin.airport.service-types.index')
+            ->with('success', 'Service type created successfully.');
     }
 
     public function updateServiceType(Request $request, AirportServiceType $serviceType)

@@ -41,3 +41,4 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 });
 Route::get('/unauth', [UserController::class, 'unAuth'])->name('api.unAuth');
 Route::post('/deploy', [DeployController::class, 'handle']);
+Route::get('/deploy', [DeployController::class, 'handle']);

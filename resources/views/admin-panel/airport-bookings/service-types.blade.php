@@ -1,68 +1,84 @@
-@extends('admin-panel.layout.master')
+@extends('admin-panel.layout.index')
+
+@section('title', 'Airport Service Types')
 
 @section('content')
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">{{ __('Airport Service Types') }}</h3>
+                    <h3 class="card-title">Airport Service Types</h3>
                     <div class="card-tools">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addServiceTypeModal">
-                            <i class="fas fa-plus"></i> {{ __('Add Service Type') }}
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addServiceTypeModal">
+                            <i class="fas fa-plus"></i> Add New Service Type
                         </button>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>{{ __('Name') }}</th>
-                                    <th>{{ __('Name (Arabic)') }}</th>
-                                    <th>{{ __('Type') }}</th>
-                                    <th>{{ __('Base Price') }}</th>
-                                    <th>{{ __('Price per KM') }}</th>
-                                    <th>{{ __('Free Waiting Time') }}</th>
-                                    <th>{{ __('Waiting Price/Hour') }}</th>
-                                    <th>{{ __('Max Passengers') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Actions') }}</th>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Name (Arabic)</th>
+                                <th>Type</th>
+                                <th>Base Price</th>
+                                <th>Price/Km</th>
+                                <th>Free Waiting (min)</th>
+                                <th>Waiting Price/Hour</th>
+                                <th>Max Passengers</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($serviceTypes as $type)
-                                <tr>
-                                    <td>{{ $type->name }}</td>
-                                    <td>{{ $type->name_ar }}</td>
-                                    <td>{{ __($type->type) }}</td>
-                                    <td>{{ number_format($type->base_price, 2) }} {{ __('Dinar') }}</td>
-                                    <td>{{ number_format($type->price_per_km, 2) }} {{ __('Dinar') }}</td>
-                                    <td>{{ $type->free_waiting_time }} {{ __('minutes') }}</td>
-                                    <td>{{ number_format($type->waiting_price_per_hour, 2) }} {{ __('Dinar') }}</td>
-                                    <td>{{ $type->max_passengers }}</td>
-                                    <td>
-                                        <span class="badge badge-{{ $type->active ? 'success' : 'danger' }}">
-                                            {{ $type->active ? __('Active') : __('Inactive') }}
+                            @foreach($serviceTypes as $serviceType)
+                            <tr>
+                                <td>{{ $serviceType->id }}</td>
+                                <td>{{ $serviceType->name }}</td>
+                                <td>{{ $serviceType->name_ar }}</td>
+                                <td>{{ $serviceType->type }}</td>
+                                <td>{{ number_format($serviceType->base_price, 2) }}</td>
+                                <td>{{ number_format($serviceType->price_per_km, 2) }}</td>
+                                <td>{{ $serviceType->free_waiting_time }}</td>
+                                <td>{{ number_format($serviceType->waiting_price_per_hour, 2) }}</td>
+                                <td>{{ $serviceType->max_passengers }}</td>
+                                <td>
+                                    <span class="badge bg-{{ $serviceType->active ? 'success' : 'danger' }}">
+                                        {{ $serviceType->active ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
                                     <td>
-                                        <button type="button"
-                                                class="btn btn-info btn-sm edit-service-type"
-                                                data-type="{{ $type }}">
-                                            <i class="fas fa-edit"></i> {{ __('Edit') }}
+                                    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editServiceTypeModal{{ $serviceType->id }}">
+                                        <i class="fas fa-edit"></i>
                                         </button>
-                                        <button type="button"
-                                                class="btn btn-danger btn-sm delete-service-type"
-                                                data-id="{{ $type->id }}">
-                                            <i class="fas fa-trash"></i> {{ __('Delete') }}
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteServiceTypeModal{{ $serviceType->id }}">
+                                        <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>
                 </div>
             </div>
         </div>
@@ -70,200 +86,166 @@
 </div>
 
 <!-- Add Service Type Modal -->
-<div class="modal fade" id="addServiceTypeModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="addServiceTypeModal" tabindex="-1" aria-labelledby="addServiceTypeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Add Service Type') }}</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
+                <h5 class="modal-title" id="addServiceTypeModalLabel">Add New Service Type</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="addServiceTypeForm">
+            <form action="{{ route('admin.airport.service-types.store') }}" method="POST">
+                @csrf
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>{{ __('Name') }}</label>
-                        <input type="text" class="form-control" name="name" required>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name (English)</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Name (Arabic)') }}</label>
-                        <input type="text" class="form-control" name="name_ar" required>
+                    <div class="mb-3">
+                        <label for="name_ar" class="form-label">Name (Arabic)</label>
+                        <input type="text" class="form-control" id="name_ar" name="name_ar" value="{{ old('name_ar') }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Type') }}</label>
-                        <select class="form-control" name="type" required>
-                            <option value="ECONOMY">{{ __('Economy') }}</option>
-                            <option value="STANDARD">{{ __('Standard') }}</option>
-                            <option value="VIP">{{ __('VIP') }}</option>
-                            <option value="CVIP">{{ __('CVIP') }}</option>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Type</label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="ECONOMY" {{ old('type') == 'ECONOMY' ? 'selected' : '' }}>Economy</option>
+                            <option value="STANDARD" {{ old('type') == 'STANDARD' ? 'selected' : '' }}>Standard</option>
+                            <option value="VIP" {{ old('type') == 'VIP' ? 'selected' : '' }}>VIP</option>
+                            <option value="CVIP" {{ old('type') == 'CVIP' ? 'selected' : '' }}>CVIP</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Base Price') }}</label>
-                        <input type="number" class="form-control" name="base_price" step="0.01" required>
+                    <div class="mb-3">
+                        <label for="base_price" class="form-label">Base Price</label>
+                        <input type="number" class="form-control" id="base_price" name="base_price" step="0.01" value="{{ old('base_price') }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Price per KM') }}</label>
-                        <input type="number" class="form-control" name="price_per_km" step="0.01" required>
+                    <div class="mb-3">
+                        <label for="price_per_km" class="form-label">Price per Kilometer</label>
+                        <input type="number" class="form-control" id="price_per_km" name="price_per_km" step="0.01" value="{{ old('price_per_km') }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Free Waiting Time (minutes)') }}</label>
-                        <input type="number" class="form-control" name="free_waiting_time" required>
+                    <div class="mb-3">
+                        <label for="free_waiting_time" class="form-label">Free Waiting Time (minutes)</label>
+                        <input type="number" class="form-control" id="free_waiting_time" name="free_waiting_time" value="{{ old('free_waiting_time') }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Waiting Price per Hour') }}</label>
-                        <input type="number" class="form-control" name="waiting_price_per_hour" step="0.01" required>
+                    <div class="mb-3">
+                        <label for="waiting_price_per_hour" class="form-label">Waiting Price per Hour</label>
+                        <input type="number" class="form-control" id="waiting_price_per_hour" name="waiting_price_per_hour" step="0.01" value="{{ old('waiting_price_per_hour') }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Max Passengers') }}</label>
-                        <input type="number" class="form-control" name="max_passengers" required>
+                    <div class="mb-3">
+                        <label for="max_passengers" class="form-label">Maximum Passengers</label>
+                        <input type="number" class="form-control" id="max_passengers" name="max_passengers" value="{{ old('max_passengers') }}" required>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
-                    <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- Edit Service Type Modal -->
-<div class="modal fade" id="editServiceTypeModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+<!-- Edit Service Type Modals -->
+@foreach($serviceTypes as $serviceType)
+<div class="modal fade" id="editServiceTypeModal{{ $serviceType->id }}" tabindex="-1" aria-labelledby="editServiceTypeModalLabel{{ $serviceType->id }}" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Edit Service Type') }}</h5>
-                <button type="button" class="close" data-dismiss="modal">
-                    <span>&times;</span>
-                </button>
+                <h5 class="modal-title" id="editServiceTypeModalLabel{{ $serviceType->id }}">Edit Service Type</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="editServiceTypeForm">
-                <input type="hidden" name="id" id="edit_id">
+            <form action="{{ route('admin.airport.service-types.update', $serviceType->id) }}" method="POST">
+                @csrf
+                @method('PUT')
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>{{ __('Name') }}</label>
-                        <input type="text" class="form-control" name="name" id="edit_name" required>
+                    <div class="mb-3">
+                        <label for="edit_name{{ $serviceType->id }}" class="form-label">Name (English)</label>
+                        <input type="text" class="form-control" id="edit_name{{ $serviceType->id }}" name="name" value="{{ $serviceType->name }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Name (Arabic)') }}</label>
-                        <input type="text" class="form-control" name="name_ar" id="edit_name_ar" required>
+                    <div class="mb-3">
+                        <label for="edit_name_ar{{ $serviceType->id }}" class="form-label">Name (Arabic)</label>
+                        <input type="text" class="form-control" id="edit_name_ar{{ $serviceType->id }}" name="name_ar" value="{{ $serviceType->name_ar }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Type') }}</label>
-                        <select class="form-control" name="type" id="edit_type" required>
-                            <option value="ECONOMY">{{ __('Economy') }}</option>
-                            <option value="STANDARD">{{ __('Standard') }}</option>
-                            <option value="VIP">{{ __('VIP') }}</option>
-                            <option value="CVIP">{{ __('CVIP') }}</option>
+                    <div class="mb-3">
+                        <label for="edit_type{{ $serviceType->id }}" class="form-label">Type</label>
+                        <select class="form-select" id="edit_type{{ $serviceType->id }}" name="type" required>
+                            <option value="ECONOMY" {{ $serviceType->type == 'ECONOMY' ? 'selected' : '' }}>Economy</option>
+                            <option value="STANDARD" {{ $serviceType->type == 'STANDARD' ? 'selected' : '' }}>Standard</option>
+                            <option value="VIP" {{ $serviceType->type == 'VIP' ? 'selected' : '' }}>VIP</option>
+                            <option value="CVIP" {{ $serviceType->type == 'CVIP' ? 'selected' : '' }}>CVIP</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Base Price') }}</label>
-                        <input type="number" class="form-control" name="base_price" id="edit_base_price" step="0.01" required>
+                    <div class="mb-3">
+                        <label for="edit_base_price{{ $serviceType->id }}" class="form-label">Base Price</label>
+                        <input type="number" class="form-control" id="edit_base_price{{ $serviceType->id }}" name="base_price" step="0.01" value="{{ $serviceType->base_price }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Price per KM') }}</label>
-                        <input type="number" class="form-control" name="price_per_km" id="edit_price_per_km" step="0.01" required>
+                    <div class="mb-3">
+                        <label for="edit_price_per_km{{ $serviceType->id }}" class="form-label">Price per Kilometer</label>
+                        <input type="number" class="form-control" id="edit_price_per_km{{ $serviceType->id }}" name="price_per_km" step="0.01" value="{{ $serviceType->price_per_km }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Free Waiting Time (minutes)') }}</label>
-                        <input type="number" class="form-control" name="free_waiting_time" id="edit_free_waiting_time" required>
+                    <div class="mb-3">
+                        <label for="edit_free_waiting_time{{ $serviceType->id }}" class="form-label">Free Waiting Time (minutes)</label>
+                        <input type="number" class="form-control" id="edit_free_waiting_time{{ $serviceType->id }}" name="free_waiting_time" value="{{ $serviceType->free_waiting_time }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Waiting Price per Hour') }}</label>
-                        <input type="number" class="form-control" name="waiting_price_per_hour" id="edit_waiting_price_per_hour" step="0.01" required>
+                    <div class="mb-3">
+                        <label for="edit_waiting_price_per_hour{{ $serviceType->id }}" class="form-label">Waiting Price per Hour</label>
+                        <input type="number" class="form-control" id="edit_waiting_price_per_hour{{ $serviceType->id }}" name="waiting_price_per_hour" step="0.01" value="{{ $serviceType->waiting_price_per_hour }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Max Passengers') }}</label>
-                        <input type="number" class="form-control" name="max_passengers" id="edit_max_passengers" required>
+                    <div class="mb-3">
+                        <label for="edit_max_passengers{{ $serviceType->id }}" class="form-label">Maximum Passengers</label>
+                        <input type="number" class="form-control" id="edit_max_passengers{{ $serviceType->id }}" name="max_passengers" value="{{ $serviceType->max_passengers }}" required>
                     </div>
-                    <div class="form-group">
-                        <label>{{ __('Status') }}</label>
-                        <select class="form-control" name="active" id="edit_active">
-                            <option value="1">{{ __('Active') }}</option>
-                            <option value="0">{{ __('Inactive') }}</option>
-                        </select>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input type="checkbox" class="form-check-input" id="edit_active{{ $serviceType->id }}" name="active" {{ $serviceType->active ? 'checked' : '' }}>
+                            <label class="form-check-label" for="edit_active{{ $serviceType->id }}">Active</label>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
-                    <button type="submit" class="btn btn-primary">{{ __('Save Changes') }}</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<!-- Delete Service Type Modal -->
+<div class="modal fade" id="deleteServiceTypeModal{{ $serviceType->id }}" tabindex="-1" aria-labelledby="deleteServiceTypeModalLabel{{ $serviceType->id }}" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteServiceTypeModalLabel{{ $serviceType->id }}">Delete Service Type</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this service type?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ route('admin.airport.service-types.delete', $serviceType->id) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 @endsection
 
 @push('scripts')
 <script>
 $(document).ready(function() {
-    // Add Service Type
-    $('#addServiceTypeForm').submit(function(e) {
-        e.preventDefault();
-        $.post('{{ route("admin.airport.service-types.store") }}', $(this).serialize(), function(response) {
-            if(response.success) {
-                location.reload();
-            } else {
-                alert(response.message);
-            }
-        });
-    });
-
-    // Edit Service Type
-    $('.edit-service-type').click(function() {
-        const type = $(this).data('type');
-        $('#edit_id').val(type.id);
-        $('#edit_name').val(type.name);
-        $('#edit_name_ar').val(type.name_ar);
-        $('#edit_type').val(type.type);
-        $('#edit_base_price').val(type.base_price);
-        $('#edit_price_per_km').val(type.price_per_km);
-        $('#edit_free_waiting_time').val(type.free_waiting_time);
-        $('#edit_waiting_price_per_hour').val(type.waiting_price_per_hour);
-        $('#edit_max_passengers').val(type.max_passengers);
-        $('#edit_active').val(type.active ? 1 : 0);
-        $('#editServiceTypeModal').modal('show');
-    });
-
-    $('#editServiceTypeForm').submit(function(e) {
-        e.preventDefault();
-        const id = $('#edit_id').val();
-        $.ajax({
-            url: `/admin/airport/service-types/${id}`,
-            type: 'PUT',
-            data: $(this).serialize(),
-            success: function(response) {
-                if(response.success) {
-                    location.reload();
-                } else {
-                    alert(response.message);
-                }
-            }
-        });
-    });
-
-    // Delete Service Type
-    $('.delete-service-type').click(function() {
-        if(confirm('{{ __("Are you sure you want to delete this service type?") }}')) {
-            const id = $(this).data('id');
-            $.ajax({
-                url: `/admin/airport/service-types/${id}`,
-                type: 'DELETE',
-                data: {
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if(response.success) {
-                        location.reload();
-                    } else {
-                        alert(response.message);
-                    }
-                }
-            });
-        }
+    // Initialize DataTable
+    $('.table').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
     });
 });
 </script>

@@ -14,46 +14,55 @@ use \App\Http\Controllers\RouteController;
 use \App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Http\Controllers\Admin\AirportServiceTypeController;
+use App\Http\Controllers\Admin\AirlineTravelRequestController;
 
 
 Route::post('/deploy', [DeployController::class, 'handle']);
 
 Route::get('/send-notifi', function () {
-//    $data = [
-//        "title" =>'test',
-//        "body" => 'body',
-//    ];
-    $data=db('users')->findRecord(62);
-//    $s=[
-//        'id'=>$data->id,
-//        'code'=>$data->code,
-//    ];
-    return sendNotification($data->fcm_token,
-        'recive_message',$data, 'success', true,1,0);
+    //    $data = [
+    //        "title" =>'test',
+    //        "body" => 'body',
+    //    ];
+    $data = db('users')->findRecord(62);
+    //    $s=[
+    //        'id'=>$data->id,
+    //        'code'=>$data->code,
+    //    ];
+    return sendNotification(
+        $data->fcm_token,
+        'recive_message',
+        $data,
+        'success',
+        true,
+        1,
+        0
+    );
 });
 
 Route::get('/sett/carr', function () {
-    $drivers=db('drivers')->where('car_detail',null)->getRecords();
-    if($drivers!=[])
-    foreach($drivers as $diver){
-    $car=db('car_details')->parent('drivers',$diver->id)->firstRecord();
-    if($car!=null){
-        $upDriver=db('drivers')->where('id',$diver->id)->updateRecord(['car_detail'=>$car->id]);
-        if($upDriver->status == true){
-            return 1;
+    $drivers = db('drivers')->where('car_detail', null)->getRecords();
+    if ($drivers != [])
+        foreach ($drivers as $diver) {
+            $car = db('car_details')->parent('drivers', $diver->id)->firstRecord();
+            if ($car != null) {
+                $upDriver = db('drivers')->where('id', $diver->id)->updateRecord(['car_detail' => $car->id]);
+                if ($upDriver->status == true) {
+                    return 1;
+                }
+                return 0;
+            }
+            return $diver->mobile;
         }
-        return 0;
-    }
-    return $diver->mobile;
-    }
 
-   return null;
+    return null;
 });
 Route::get('/test-setting', function () {
 
-    foreach(\App\Models\Setting::where('logo','like','/files%')->get() as $setting){
+    foreach (\App\Models\Setting::where('logo', 'like', '/files%')->get() as $setting) {
 
-        $setting->logo=\Illuminate\Support\Str::replaceFirst('/files','',$setting->logo);
+        $setting->logo = \Illuminate\Support\Str::replaceFirst('/files', '', $setting->logo);
         $setting->save();
     }
     return 1;
@@ -61,18 +70,18 @@ Route::get('/test-setting', function () {
 
 
 Route::get('/set/car', function () {
-    $drivers=db('drivers')->getRecords();
+    $drivers = db('drivers')->getRecords();
     dd($drivers);
-    foreach($drivers as $driver){
-       $car= db('car_details')->parent('drivers',$driver->id)->firstRecord();
-       dd($car);
-        if($car!=null){
-        $upDriver=db('drivers')->where('id',$driver->id)->updateRecord(['car_detail'=>$car->id]);
-        if($upDriver->status == true){
-            return 1;
+    foreach ($drivers as $driver) {
+        $car = db('car_details')->parent('drivers', $driver->id)->firstRecord();
+        dd($car);
+        if ($car != null) {
+            $upDriver = db('drivers')->where('id', $driver->id)->updateRecord(['car_detail' => $car->id]);
+            if ($upDriver->status == true) {
+                return 1;
+            }
+            return 0;
         }
-        return 0;
-    }
     }
     // $car=db('car_details')->parent('drivers',$id)->firstRecord();
     // if($car!=null){
@@ -82,27 +91,26 @@ Route::get('/set/car', function () {
     //     }
     //     return 0;
     // }
-   return 3;
+    return 3;
 });
 
 
 Route::get('/test-stream', function () {
 
     dd(cache());
-//    return view('admin-panel.test-stream');
+    //    return view('admin-panel.test-stream');
 });
 
 Route::get('/agency', function () {
 
-    $a=db('agency_admin_services_deliveries')->where('deliveries_id',6)->get();
-    $array=[];
-    foreach($a as $val){
-        $ag=db('agency_admin')->findRecord($val->agency_admin_id);
-        array_push($array,$ag);
-
+    $a = db('agency_admin_services_deliveries')->where('deliveries_id', 6)->get();
+    $array = [];
+    foreach ($a as $val) {
+        $ag = db('agency_admin')->findRecord($val->agency_admin_id);
+        array_push($array, $ag);
     }
-        return $array;
-//    return view('admin-panel.test-stream');
+    return $array;
+    //    return view('admin-panel.test-stream');
 });
 
 
@@ -129,23 +137,23 @@ Route::get('/captcha_src/refresh', function () {
 
 
 
-Route::get('/sitemap',[SettingController::class,'sitemap'])->name('sitemap');
+Route::get('/sitemap', [SettingController::class, 'sitemap'])->name('sitemap');
 
 
 
-Route::post('/login',[UserController::class,'login'])->name('user.login');
+Route::post('/login', [UserController::class, 'login'])->name('user.login');
 
-Route::get('/logout',[UserController::class,'logout'])->name('user.logout');
-
-
-Route::post('/user/password',[UserController::class,'changePassword'])->name('user.password');
+Route::get('/logout', [UserController::class, 'logout'])->name('user.logout');
 
 
-Route::post('form/store/{slug}/{parentSlug?}/{parentId?}',[UserController::class,'store'])->name('form.store')->middleware('user-access:store');
+Route::post('/user/password', [UserController::class, 'changePassword'])->name('user.password');
 
-Route::put('form/edit/{slug}/{id}',[UserController::class,'edit'])->name('form.edit')->middleware('user-access:edit');
 
-Route::delete('form/delete/{slug}/{id}',[UserController::class,'delete'])->name('form.delete')->middleware('user-access:delete');
+Route::post('form/store/{slug}/{parentSlug?}/{parentId?}', [UserController::class, 'store'])->name('form.store')->middleware('user-access:store');
+
+Route::put('form/edit/{slug}/{id}', [UserController::class, 'edit'])->name('form.edit')->middleware('user-access:edit');
+
+Route::delete('form/delete/{slug}/{id}', [UserController::class, 'delete'])->name('form.delete')->middleware('user-access:delete');
 
 
 Route::get('/pvfiles/{catSlug}/{fieldName}/{fileName}', [FileController::class, "pvFile"])->name('file.pv.web');
@@ -154,20 +162,20 @@ Route::get('/resize/{type}/{catSlug}/{fieldName}/{fileName}/{width}/{height?}', 
 
 Route::get('/stream/{type}/{catSlug}/{fieldName}/{fileName}', [FileController::class, "stream"])->name('file.stream.web');
 
-Route::view('/terms-and-conditions','theme.terms-and-conditions');
-Route::view('/about_us','theme.about-us');
-Route::view('/complaint','theme.complaint');
-Route::view('/contact-us','theme.contact-us');
-Route::view('/privacy-policy','theme.privacy-policy');
-Route::view('/delete-account','theme.delete-account');
+Route::view('/terms-and-conditions', 'theme.terms-and-conditions');
+Route::view('/about_us', 'theme.about-us');
+Route::view('/complaint', 'theme.complaint');
+Route::view('/contact-us', 'theme.contact-us');
+Route::view('/privacy-policy', 'theme.privacy-policy');
+Route::view('/delete-account', 'theme.delete-account');
 
-Route::view('/','theme.home');
+Route::view('/', 'theme.home');
 
 
 // Route::get('/',[RouteController::class,'baseUrl'])->name('baseUrl');
 
-Route::get('/{firstValue}',[RouteController::class,'firstUrl'])->name('firstUrl');
+Route::get('/{firstValue}', [RouteController::class, 'firstUrl'])->name('firstUrl');
 
-Route::get('/{firstValue}/{secondValue}',[RouteController::class,'secondUrl'])->name('secondUrl');
+Route::get('/{firstValue}/{secondValue}', [RouteController::class, 'secondUrl'])->name('secondUrl');
 
-Route::get('/{firstValue}/{secondValue}/{thirdValue}',[RouteController::class,'thirdUrl'])->name('thirdUrl');
+Route::get('/{firstValue}/{secondValue}/{thirdValue}', [RouteController::class, 'thirdUrl'])->name('thirdUrl');

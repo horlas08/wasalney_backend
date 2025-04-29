@@ -45,6 +45,7 @@ class LanguageController extends Controller
             return true;
 
         } catch (\Exception $e) {
+
             Storage::disk('file')->append('log.txt', $e->getMessage());
         }
         return false;

@@ -1,66 +1,68 @@
-@extends('admin-panel.layout.index')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">{{ __('Airport Bookings') }}</h3>
+                    <h3 class="card-title"><?php echo e(__('Airport Bookings')); ?></h3>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>{{ __('Booking ID') }}</th>
-                                    <th>{{ __('User') }}</th>
-                                    <th>{{ __('Service Type') }}</th>
-                                    <th>{{ __('Booking Type') }}</th>
-                                    <th>{{ __('Pickup Location') }}</th>
-                                    <th>{{ __('Booking Date') }}</th>
-                                    <th>{{ __('Status') }}</th>
-                                    <th>{{ __('Total Fare') }}</th>
-                                    <th>{{ __('Actions') }}</th>
+                                    <th><?php echo e(__('Booking ID')); ?></th>
+                                    <th><?php echo e(__('User')); ?></th>
+                                    <th><?php echo e(__('Service Type')); ?></th>
+                                    <th><?php echo e(__('Booking Type')); ?></th>
+                                    <th><?php echo e(__('Pickup Location')); ?></th>
+                                    <th><?php echo e(__('Booking Date')); ?></th>
+                                    <th><?php echo e(__('Status')); ?></th>
+                                    <th><?php echo e(__('Total Fare')); ?></th>
+                                    <th><?php echo e(__('Actions')); ?></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($bookings as $booking)
+                                <?php $__currentLoopData = $bookings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr>
-                                    <td>{{ $booking->id }}</td>
-                                    <td>{{ $booking->user->name }}</td>
-                                    <td>{{ $booking->serviceType->name }}</td>
-                                    <td>{{ __($booking->booking_type) }}</td>
-                                    <td>{{ $booking->pickup_location }}</td>
-                                    <td>{{ $booking->booking_date->format('Y-m-d H:i') }}</td>
+                                    <td><?php echo e($booking->id); ?></td>
+                                    <td><?php echo e($booking->user->name); ?></td>
+                                    <td><?php echo e($booking->serviceType->name); ?></td>
+                                    <td><?php echo e(__($booking->booking_type)); ?></td>
+                                    <td><?php echo e($booking->pickup_location); ?></td>
+                                    <td><?php echo e($booking->booking_date->format('Y-m-d H:i')); ?></td>
                                     <td>
-                                        <span class="badge badge-{{ $booking->status == 'PENDING' ? 'warning' :
+                                        <span class="badge badge-<?php echo e($booking->status == 'PENDING' ? 'warning' :
                                             ($booking->status == 'ASSIGNED' ? 'info' :
                                             ($booking->status == 'IN_PROGRESS' ? 'primary' :
-                                            ($booking->status == 'COMPLETED' ? 'success' : 'danger'))) }}">
-                                            {{ __($booking->status) }}
+                                            ($booking->status == 'COMPLETED' ? 'success' : 'danger')))); ?>">
+                                            <?php echo e(__($booking->status)); ?>
+
                                         </span>
                                     </td>
-                                    <td>{{ number_format($booking->total_fare, 2) }} {{ __('Dinar') }}</td>
+                                    <td><?php echo e(number_format($booking->total_fare, 2)); ?> <?php echo e(__('Dinar')); ?></td>
                                     <td>
-                                        <a href="{{ route('admin.airport.bookings.show', $booking) }}"
+                                        <a href="<?php echo e(route('admin.airport.bookings.show', $booking)); ?>"
                                            class="btn btn-info btn-sm">
-                                            <i class="fas fa-eye"></i> {{ __('View') }}
+                                            <i class="fas fa-eye"></i> <?php echo e(__('View')); ?>
+
                                         </a>
-                                        @if($booking->status == 'PENDING')
+                                        <?php if($booking->status == 'PENDING'): ?>
                                         <button type="button"
                                                 class="btn btn-primary btn-sm assign-driver"
-                                                data-booking-id="{{ $booking->id }}">
-                                            <i class="fas fa-user-plus"></i> {{ __('Assign Driver') }}
+                                                data-booking-id="<?php echo e($booking->id); ?>">
+                                            <i class="fas fa-user-plus"></i> <?php echo e(__('Assign Driver')); ?>
+
                                         </button>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
-                    {{ $bookings->links() }}
+                    <?php echo e($bookings->links()); ?>
+
                 </div>
             </div>
         </div>
@@ -72,7 +74,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{{ __('Assign Driver') }}</h5>
+                <h5 class="modal-title"><?php echo e(__('Assign Driver')); ?></h5>
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
@@ -81,7 +83,7 @@
                 <div id="availableDrivers">
                     <div class="text-center">
                         <div class="spinner-border" role="status">
-                            <span class="sr-only">{{ __('Loading...') }}</span>
+                            <span class="sr-only"><?php echo e(__('Loading...')); ?></span>
                         </div>
                     </div>
                 </div>
@@ -90,9 +92,9 @@
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script>
 $(document).ready(function() {
     $('.assign-driver').click(function() {
@@ -126,7 +128,7 @@ $(document).ready(function() {
 
         $.post(`/admin/airport/bookings/${bookingId}/assign-driver`, {
             driver_id: driverId,
-            _token: '{{ csrf_token() }}'
+            _token: '<?php echo e(csrf_token()); ?>'
         }, function(response) {
             if(response.success) {
                 location.reload();
@@ -137,4 +139,6 @@ $(document).ready(function() {
     });
 });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('admin-panel.layout.index', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH /home/qozeem/projects/web/wasalney/resources/views/admin-panel/airport-bookings/index.blade.php ENDPATH**/ ?>

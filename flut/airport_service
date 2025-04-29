@@ -1,0 +1,15 @@
+// lib/Services/airport_service.dart
+class AirportService {
+  static Future<List<AirportServiceType>> getServiceTypes() async {
+    try {
+      final response = await http.get(Uri.parse('${Config.apiUrl}/airport/service-types'));
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        return data.map((json) => AirportServiceType.fromJson(json)).toList();
+      }
+      throw Exception('Failed to load service types');
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+}

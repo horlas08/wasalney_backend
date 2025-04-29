@@ -213,6 +213,13 @@
                 </a>
             @endif
 
+            @if(\App\Models\Admin::checkAccess('airline-travel','show'))
+                <a id="v-airline-travel-tab" href="{{route('admin.airline-travel.index')}}" class="nav-link DC_item_tabBox DC_link_item">
+                    <i class="fa-solid fa-plane-departure"></i>
+                    <span class="DC_tooltip_text">{{__('Airline Travel')}}</span>
+                </a>
+            @endif
+
         </div>
         <div class="DC_bottom-bar ">
             <button class="DC_item_tabBox DC_theme_btn" onclick="changeStyle()">
