@@ -18,6 +18,7 @@ use App\Http\Controllers\UserAccessController;
 use \App\Http\Controllers\ReportController;
 use \App\Http\Controllers\GeneratorController;
 use App\Http\Controllers\Admin\AirlineTravelRequestController;
+use App\Http\Controllers\Admin\TourBookingAdminController;
 
 
 Route::get('/login', [AdminController::class, 'loginForm'])->name('admin.loginForm');
@@ -172,7 +173,7 @@ Route::group(['middleware' => 'admin-access:airport-service,show'], function () 
     Route::get('/airport/service-types', [AirportBookingAdminController::class, 'manageServiceTypes'])->name('admin.airport.service-types.index');
     Route::post('/airport/service-types', [AirportBookingAdminController::class, 'storeServiceType'])
         ->name('admin.airport.service-types.store')
-        ->middleware('admin-access:airport-service,store');
+        ->middleware('admNin-access:airport-service,store');
     Route::put('/airport/service-types/{serviceType}', [AirportBookingAdminController::class, 'updateServiceType'])
         ->name('admin.airport.service-types.update')
         ->middleware('admin-access:airport-service,edit');
@@ -188,4 +189,26 @@ Route::group(['prefix' => 'airline-travel', 'as' => 'admin.airline-travel.', 'mi
     Route::put('/{id}/status', [AirlineTravelRequestController::class, 'updateStatus'])
         ->name('update-status')
         ->middleware('admin-access:airline-travel,edit');
+});
+
+// Tour Management Routes
+Route::group(['middleware' => 'admin-access:tour,show'], function () {
+    Route::get('/tour/bookings', [TourBookingAdminController::class, 'index'])->name('admin.tour.bookings.index');
+    Route::get('/tour/bookings/{booking}', [TourBookingAdminController::class, 'show'])->name('admin.tour.bookings.show');
+    Route::put('/tour/bookings/{booking}/status', [TourBookingAdminController::class, 'updateStatus'])
+        ->name('admin.tour.bookings.update-status')
+        ->middleware('admin-access:tour,edit');
+});
+
+Route::group(['middleware' => 'admin-access:tour-destination,show'], function () {
+    Route::get('/tour/destinations', [TourBookingAdminController::class, 'destinations'])->name('admin.tour.destinations.index');
+    Route::post('/tour/destinations', [TourBookingAdminController::class, 'storeDestination'])
+        ->name('admin.tour.destinations.store')
+        ->middleware('admin-access:tour-destination,store');
+    Route::put('/tour/destinations/{destination}', [TourBookingAdminController::class, 'updateDestination'])
+        ->name('admin.tour.destinations.update')
+        ->middleware('admin-access:tour-destination,edit');
+    Route::delete('/tour/destinations/{destination}', [TourBookingAdminController::class, 'deleteDestination'])
+        ->name('admin.tour.destinations.delete')
+        ->middleware('admin-access:tour-destination,delete');
 });

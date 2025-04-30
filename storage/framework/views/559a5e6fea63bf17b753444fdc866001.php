@@ -220,6 +220,13 @@
                 </a>
             <?php endif; ?>
 
+            <?php if(\App\Models\Admin::checkAccess('tour-service','show')): ?>
+                <a id="v-tour-service-tab" href="<?php echo e(route('admin.tour.bookings.index')); ?>" class="nav-link DC_item_tabBox DC_link_item">
+                    <i class="fa-solid fa-map-location-dot"></i>
+                    <span class="DC_tooltip_text"><?php echo e(__('Tour Services')); ?></span>
+                </a>
+            <?php endif; ?>
+
         </div>
         <div class="DC_bottom-bar ">
             <button class="DC_item_tabBox DC_theme_btn" onclick="changeStyle()">

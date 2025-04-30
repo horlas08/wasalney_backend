@@ -1,0 +1,1 @@
+ <?php /**PATH /home/qozeem/projects/web/wasalney/resources/views/admin-panel/tour-bookings/index.blade.php ENDPATH**/ ?>

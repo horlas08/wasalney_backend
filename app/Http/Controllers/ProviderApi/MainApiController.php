@@ -18,7 +18,7 @@ class MainApiController extends Controller
             // Get regular delivery services
             $result = db('deliveries')->withRelations(['taxi_options', 'stop_without_driver'])->getRecords();
 
-            // Add airport services without selecting specific fields
+            // Add airport services
             $airportServices = \App\Models\AirportServiceType::where('active', true)
                 ->get()
                 ->map(function ($service) {
@@ -37,7 +37,22 @@ class MainApiController extends Controller
                     ];
                 });
 
-            $result = $result->concat($airportServices);
+            // Add tour services
+            $tourDestinations = \App\Models\TourDestination::where('active', true)
+                ->where('is_departure', true)
+                ->get()
+                ->map(function ($destination) {
+                    return [
+                        'id' => $destination->id,
+                        'name' => $destination->name,
+                        'name_ar' => $destination->name_ar,
+                        'description' => $destination->description,
+                        'description_ar' => $destination->description_ar,
+                        'service_type' => 'tour'
+                    ];
+                });
+
+            $result = $result->concat($airportServices)->concat($tourDestinations);
 
             return response()->api($result);
         } catch (\Exception $e) {
