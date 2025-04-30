@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AirportBookingController;
 use App\Http\Controllers\Api\TourBookingController;
+use App\Http\Controllers\Api\AirlineTravelRequestController;
 use App\Models\Field;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,6 +47,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('/tour/bookings', [TourBookingController::class, 'getUserBookings']);
     Route::get('/tour/bookings/{booking}', [TourBookingController::class, 'getBookingDetails']);
     Route::post('/tour/bookings/{booking}/cancel', [TourBookingController::class, 'cancel']);
+
+    // Airline Travel Request Routes
+    Route::get('/airline/requests', [AirlineTravelRequestController::class, 'index']);
+    Route::post('/airline/requests', [AirlineTravelRequestController::class, 'store']);
+    Route::get('/airline/requests/{request}', [AirlineTravelRequestController::class, 'show']);
+    Route::put('/airline/requests/{request}', [AirlineTravelRequestController::class, 'update']);
+    Route::post('/airline/requests/{request}/cancel', [AirlineTravelRequestController::class, 'cancel']);
 });
 Route::get('/unauth', [UserController::class, 'unAuth'])->name('api.unAuth');
 Route::post('/deploy', [DeployController::class, 'handle']);
