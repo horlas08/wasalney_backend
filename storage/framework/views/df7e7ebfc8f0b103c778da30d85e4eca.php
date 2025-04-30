@@ -33,9 +33,9 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table table-bordered table-striped">
-                        <thead>
-                            <tr>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
                                 <th>ID</th>
                                 <th>Name</th>
                                 <th>Name (Arabic)</th>
@@ -47,9 +47,9 @@
                                 <th>Max Passengers</th>
                                 <th>Status</th>
                                 <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                                </tr>
+                            </thead>
+                            <tbody>
                             <?php $__currentLoopData = $serviceTypes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $serviceType): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td><?php echo e($serviceType->id); ?></td>
@@ -65,20 +65,20 @@
                                     <span class="badge bg-<?php echo e($serviceType->active ? 'success' : 'danger'); ?>">
                                         <?php echo e($serviceType->active ? 'Active' : 'Inactive'); ?>
 
-                                    </span>
-                                </td>
-                                <td>
+                                        </span>
+                                    </td>
+                                    <td>
                                     <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#editServiceTypeModal<?php echo e($serviceType->id); ?>">
                                         <i class="fas fa-edit"></i>
-                                    </button>
+                                        </button>
                                     <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteServiceTypeModal<?php echo e($serviceType->id); ?>">
                                         <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                        </tbody>
-                    </table>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </tbody>
+                        </table>
                 </div>
             </div>
         </div>
