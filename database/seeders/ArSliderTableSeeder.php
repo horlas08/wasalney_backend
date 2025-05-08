@@ -14,16 +14,16 @@ class ArSliderTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('ar_slider')->delete();
-        
+
         \DB::table('ar_slider')->insert(array (
-            0 => 
+            0 =>
             array (
                 'created_at' => '2024-08-04 11:56:40',
                 'id' => 16,
-                'image' => 'slider/image/1740982376_ed0f4e93b5891e7021a634ee72a7fb66.png',
+                'image' => 'slider/image/1740982376_ed0f4e93b5891e7021a634ee72a7fb.png',
                 'link' => NULL,
                 'parent_id' => NULL,
                 'parent_slug' => NULL,
@@ -31,7 +31,7 @@ class ArSliderTableSeeder extends Seeder
                 'sort' => 1722769000025400000,
                 'updated_at' => '2025-03-03 06:42:56',
             ),
-            1 => 
+            1 =>
             array (
                 'created_at' => '2025-03-18 08:23:35',
                 'id' => 18,
@@ -44,7 +44,7 @@ class ArSliderTableSeeder extends Seeder
                 'updated_at' => '2025-03-18 08:23:35',
             ),
         ));
-        
-        
+
+
     }
 }

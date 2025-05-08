@@ -14,12 +14,12 @@ class ArDeliveriesTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('ar_deliveries')->delete();
-        
+
         \DB::table('ar_deliveries')->insert(array (
-            0 => 
+            0 =>
             array (
                 'back_price' => 1.3,
                 'base_price' => 2250.0,
@@ -30,7 +30,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'have_economic' => 1,
                 'hurry_price' => '10',
                 'id' => 9,
-            'image' => 'deliveries/image/1741671839_car (2).png',
+            'image' => 'deliveries/image/car-w.png',
                 'image_waiting' => 'deliveries/image_waiting/1707288421.gif',
                 'parent_id' => NULL,
                 'parent_slug' => NULL,
@@ -46,7 +46,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'type' => 3,
                 'updated_at' => '2025-03-11 06:13:59',
             ),
-            1 => 
+            1 =>
             array (
                 'back_price' => 1.2,
                 'base_price' => 10000.0,
@@ -57,7 +57,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'have_economic' => NULL,
                 'hurry_price' => '15',
                 'id' => 10,
-                'image' => 'deliveries/image/1740982704_delivery-1.svg',
+                'image' => 'deliveries/image/delivery.png',
                 'image_waiting' => 'deliveries/image_waiting/1707712437.gif',
                 'parent_id' => NULL,
                 'parent_slug' => NULL,
@@ -73,7 +73,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'type' => 6,
                 'updated_at' => '2025-03-03 06:48:24',
             ),
-            2 => 
+            2 =>
             array (
                 'back_price' => 1.2,
                 'base_price' => 2250.0,
@@ -84,7 +84,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'have_economic' => 1,
                 'hurry_price' => '15',
                 'id' => 11,
-                'image' => 'deliveries/image/1740982737_car.svg',
+                'image' => 'deliveries/image/car.png',
                 'image_waiting' => 'deliveries/image_waiting/1727089441_7609a6297cca36e1f15c6a38315ad8b7.gif',
                 'parent_id' => NULL,
                 'parent_slug' => NULL,
@@ -100,7 +100,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'type' => 3,
                 'updated_at' => '2025-03-03 09:04:54',
             ),
-            3 => 
+            3 =>
             array (
                 'back_price' => 20.0,
                 'base_price' => 2500.0,
@@ -111,7 +111,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'have_economic' => NULL,
                 'hurry_price' => '10',
                 'id' => 12,
-                'image' => 'deliveries/image/1740982766_truck-1.svg',
+                'image' => 'deliveries/image/truck.png',
                 'image_waiting' => 'deliveries/image_waiting/1730278635_crane-truck_12339155.gif',
                 'parent_id' => NULL,
                 'parent_slug' => NULL,
@@ -127,7 +127,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'type' => 3,
                 'updated_at' => '2025-03-03 06:49:26',
             ),
-            4 => 
+            4 =>
             array (
                 'back_price' => 50.0,
                 'base_price' => 5000.0,
@@ -154,7 +154,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'type' => 3,
                 'updated_at' => '2025-03-17 14:46:32',
             ),
-            5 => 
+            5 =>
             array (
                 'back_price' => 1.2,
                 'base_price' => 2250.0,
@@ -165,7 +165,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'have_economic' => 1,
                 'hurry_price' => '15',
                 'id' => 14,
-                'image' => 'deliveries/image/1742025954_car.svg',
+                'image' => 'deliveries/image/car.png',
                 'image_waiting' => 'deliveries/image_waiting/1742025954_1727089441_7609a6297cca36e1f15c6a38315ad8b7.gif',
                 'parent_id' => NULL,
                 'parent_slug' => NULL,
@@ -181,7 +181,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'type' => 3,
                 'updated_at' => '2025-03-15 09:46:20',
             ),
-            6 => 
+            6 =>
             array (
                 'back_price' => 1.2,
                 'base_price' => 2250.0,
@@ -192,7 +192,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'have_economic' => 1,
                 'hurry_price' => '15',
                 'id' => 15,
-            'image' => 'deliveries/image/1742026101_box-return (2).svg',
+            'image' => 'deliveries/image/box-return.png',
                 'image_waiting' => 'deliveries/image_waiting/1742026101_1727089441_7609a6297cca36e1f15c6a38315ad8b7.gif',
                 'parent_id' => NULL,
                 'parent_slug' => NULL,
@@ -208,7 +208,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'type' => 2,
                 'updated_at' => '2025-03-15 08:38:21',
             ),
-            7 => 
+            7 =>
             array (
                 'back_price' => NULL,
                 'base_price' => 1000.0,
@@ -235,7 +235,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'type' => 3,
                 'updated_at' => '2025-03-16 00:40:15',
             ),
-            8 => 
+            8 =>
             array (
                 'back_price' => 10.0,
                 'base_price' => 1000.0,
@@ -263,7 +263,7 @@ class ArDeliveriesTableSeeder extends Seeder
                 'updated_at' => '2025-03-16 00:39:07',
             ),
         ));
-        
-        
+
+
     }
 }
