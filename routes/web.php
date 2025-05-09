@@ -53,7 +53,7 @@ Route::get('/test-git', function() {
 
 // Super simple webhook endpoint using direct shell commands
 // This is a last resort if other methods fail
-Route::post('/simple-webhook', function() {
+Route::any('/simple-webhook', function() {
     $projectPath = base_path();
 
     // Log to a specific file for debugging
