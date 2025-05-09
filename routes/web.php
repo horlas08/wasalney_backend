@@ -54,7 +54,7 @@ Route::any('/simple-webhook', function() {
     // 3. If that fails, just show what changes would be made
 
     // First, fetch the changes
-    $fetchCommand = 'cd ' . $projectPath . ' && git pull 2>&1';
+    $fetchCommand = 'git config --global --add safe.directory'. $projectPath. ' && cd '. $projectPath . ' && git pull 2>&1';
     $fetchOutput = shell_exec($fetchCommand);
     file_put_contents($logFile, date('Y-m-d H:i:s') . " - Fetch output: " . ($fetchOutput ?? 'No output') . "\n", FILE_APPEND);
 
