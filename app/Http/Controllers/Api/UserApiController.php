@@ -422,8 +422,8 @@ class UserApiController extends Controller
     {
         try {
             $user = $request->user();
-            return $user;
             $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
+            return $infoUser;
             if ($infoUser->status == true) {
                 $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
 
