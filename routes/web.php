@@ -54,14 +54,14 @@ Route::any('/simple-webhook', function() {
     // 3. If that fails, just show what changes would be made
 
     // First, fetch the changes
-    $fetchCommand = 'cd ' . $projectPath . ' && git fetch --all 2>&1';
+    $fetchCommand = 'cd ' . $projectPath . ' && git pull 2>&1';
     $fetchOutput = shell_exec($fetchCommand);
     file_put_contents($logFile, date('Y-m-d H:i:s') . " - Fetch output: " . ($fetchOutput ?? 'No output') . "\n", FILE_APPEND);
 
     // Then try a soft reset - this approach sometimes works better with permission issues
-    $resetCommand = 'cd ' . $projectPath . ' && git reset --mixed origin/main 2>&1';
-    $resetOutput = shell_exec($resetCommand);
-    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Reset output: " . ($resetOutput ?? 'No output') . "\n", FILE_APPEND);
+//    $resetCommand = 'cd ' . $projectPath . ' && git reset --mixed origin/main 2>&1';
+//    $resetOutput = shell_exec($resetCommand);
+//    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Reset output: " . ($resetOutput ?? 'No output') . "\n", FILE_APPEND);
 
     // Get information about what changed
     $logCommand = 'cd ' . $projectPath . ' && git status 2>&1';
@@ -75,7 +75,7 @@ Route::any('/simple-webhook', function() {
 
     // Combine all outputs
     $output = "Fetch: " . ($fetchOutput ?? 'Success') . "\n";
-    $output .= "Reset: " . ($resetOutput ?? 'Success') . "\n";
+//    $output .= "Reset: " . ($resetOutput ?? 'Success') . "\n";
     $output .= "Status: " . ($logOutput ?? 'Unknown') . "\n";
     $output .= "Cache: " . ($cacheOutput ?? 'Success') . "\n";
 
