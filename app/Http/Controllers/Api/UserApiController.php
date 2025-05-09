@@ -380,7 +380,7 @@ class UserApiController extends Controller
         }
         return response()->api(null,__('خطا'), 400);
     }
-    
+
     function setFCMToken(Request $request)
     {
         try {
@@ -417,7 +417,7 @@ class UserApiController extends Controller
         }
         return response()->api(null,__('خطا'), 400);
     }
-    
+
     function updateAvatar(Request $request)
     {
         try {
@@ -432,7 +432,8 @@ class UserApiController extends Controller
                 $driver->yesterday_statistics = dailyReport($driver->id, getDateDay(1));
 
                 return response()->api($driver);
-            } else {
+            }
+            else {
                 $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
 
                 $driver->credit = driverCredit($driver->wallet);
