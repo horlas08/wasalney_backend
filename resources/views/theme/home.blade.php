@@ -17,7 +17,7 @@
             </div>
             <nav class="nav-links">
                 <ul>
-                    <li><a href="/aboutsss" class="nav-button">حولنا</a></li>
+                    <li><a href="/about11" class="nav-button">حولنا</a></li>
                     <li><a href="/contact" class="nav-button">الاتصال بنا</a></li>
                     <li><a href="/terms" class="nav-button">الشروط والأحكام</a></li>
                 </ul>
