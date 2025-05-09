@@ -17,7 +17,7 @@
             </div>
             <nav class="nav-links">
                 <ul>
-                    <li><a href="/about" class="nav-button">حولنا</a></li>
+                    <li><a href="/abouts" class="nav-button">حولنا</a></li>
                     <li><a href="/contact" class="nav-button">الاتصال بنا</a></li>
                     <li><a href="/terms" class="nav-button">الشروط والأحكام</a></li>
                 </ul>
@@ -27,27 +27,27 @@
 
     <section id="banner" style="background-image: url('/theme/img/transport.svg');"></section>
 
-    
-    
+
+
         <section id="services">
             <div class="service">
                 <i class="fas fa-user-shield service-icon"></i>
                 <h3>تكسي نسائي</h3>
                 <p>خدمة تكسي مريحة وآمنة للسيدات بخصوصية تامة.</p>
             </div>
-            
+
             <div class="service">
                 <i class="fas fa-car service-icon"></i>
                 <h3>تكسي </h3>
                 <p>أفضل و اسرع  خدمة نقل  بأسعار مناسبة.</p>
             </div>
-            
+
             <div class="service">
                 <i class="fas fa-car-crash service-icon"></i>
                 <h3>كرين</h3>
                 <p>خدمة سحب فورية وآمنة لسيارتك عند مواجهة اي خلل في الشارع.</p>
             </div>
-            
+
             <div class="service">
                 <i class="fas fa-dolly-flatbed service-icon"></i>
                 <h3>نقل الأثاث</h3>
@@ -56,8 +56,8 @@
         </section>
 <!-- لبنک های دانلود اپلیکیشن های راننده و مسافر -->
 
-        
-        
+
+
 
     <footer>
         <p>&copy; 2024 جميع الحقوق محفوظة. تطبيق  اوكي</p>
