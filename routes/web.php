@@ -48,21 +48,36 @@ Route::any('/simple-webhook', function() {
 
     file_put_contents($logFile, date('Y-m-d H:i:s') . " - Debug info: " . print_r($debug, true) . "\n", FILE_APPEND);
 
-    // Create a shell script that can be executed with sudo if needed
-    $shellScript = '#!/bin/bash
-    cd ' . $projectPath . '
-    git pull
-    php artisan optimize:clear
-    ';
-    $scriptPath = $projectPath . '/storage/deployment.sh';
-    file_put_contents($scriptPath, $shellScript);
-    chmod($scriptPath, 0755);
+    // Try a different approach that might work better with permission issues:
+    // 1. Fetch changes
+    // 2. Try a reset (which sometimes works better than pull with permissions)
+    // 3. If that fails, just show what changes would be made
 
-    // Log the script creation
-    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Created deployment script\n", FILE_APPEND);
+    // First, fetch the changes
+    $fetchCommand = 'cd ' . $projectPath . ' && git fetch --all 2>&1';
+    $fetchOutput = shell_exec($fetchCommand);
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Fetch output: " . ($fetchOutput ?? 'No output') . "\n", FILE_APPEND);
 
-    // Try to execute the script directly first
-    $output = shell_exec($scriptPath . ' 2>&1');
+    // Then try a soft reset - this approach sometimes works better with permission issues
+    $resetCommand = 'cd ' . $projectPath . ' && git reset --mixed origin/main 2>&1';
+    $resetOutput = shell_exec($resetCommand);
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Reset output: " . ($resetOutput ?? 'No output') . "\n", FILE_APPEND);
+
+    // Get information about what changed
+    $logCommand = 'cd ' . $projectPath . ' && git status 2>&1';
+    $logOutput = shell_exec($logCommand);
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Status output: " . ($logOutput ?? 'No output') . "\n", FILE_APPEND);
+
+    // Clear cache
+    $cacheCommand = 'cd ' . $projectPath . ' && php artisan optimize:clear 2>&1';
+    $cacheOutput = shell_exec($cacheCommand);
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Cache clear output: " . ($cacheOutput ?? 'No output') . "\n", FILE_APPEND);
+
+    // Combine all outputs
+    $output = "Fetch: " . ($fetchOutput ?? 'Success') . "\n";
+    $output .= "Reset: " . ($resetOutput ?? 'Success') . "\n";
+    $output .= "Status: " . ($logOutput ?? 'Unknown') . "\n";
+    $output .= "Cache: " . ($cacheOutput ?? 'Success') . "\n";
 
     if ($output === null) {
         $errorMessage = "Command execution failed or returned no output\n";
@@ -104,11 +119,34 @@ Route::any('/simple-webhook', function() {
     // Log the result
     file_put_contents($logFile, date('Y-m-d H:i:s') . " - Command output: " . $output . "\n\n", FILE_APPEND);
 
-    return response()->json([
-        'status' => 'completed',
+    // Check if there were permission errors
+    $hasPermissionErrors = (strpos($output, 'Permission denied') !== false);
+
+    // Standard success response
+    $response = [
+        'status' => $hasPermissionErrors ? 'partial' : 'completed',
         'output' => $output,
         'debug' => $debug
-    ])->withHeaders([
+    ];
+
+    // Add notice if there were permission errors
+    if ($hasPermissionErrors) {
+        // Special handling for .user.ini files which often can't be modified
+        if (strpos($output, '.user.ini') !== false) {
+            $response['notice'] = 'Some files cannot be updated due to hosting restrictions.';
+            $response['solution'] = 'Run these commands on your server to fix permissions while skipping protected files:
+            sudo find ' . $projectPath . ' -not -path "*/\.*" -exec chown www:www {} \;
+            sudo find ' . $projectPath . ' -path "*/\.git*" -exec chown www:www {} \;';
+        } else {
+            $response['notice'] = 'File permission errors detected.';
+            $response['solution'] = 'Run this command on your server to fix: sudo chown -R www:www ' . $projectPath;
+        }
+
+        // Log this event
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " - PERMISSION ERRORS DETECTED. Check the solution in the response.\n", FILE_APPEND);
+    }
+
+    return response()->json($response)->withHeaders([
         'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
         'Pragma' => 'no-cache',
         'Expires' => 'Sun, 02 Jan 1990 00:00:00 GMT'
