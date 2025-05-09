@@ -53,17 +53,21 @@ Route::any('/simple-webhook', function() {
     // 2. Try a reset (which sometimes works better than pull with permissions)
     // 3. If that fails, just show what changes would be made
 
-    // First, fetch the changes
-    $fetchCommand = 'git config --global --add safe.directory'. $projectPath. ' && cd '. $projectPath . ' && git pull 2>&1';
-    $fetchOutput = shell_exec($fetchCommand);
-    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Fetch output: " . ($fetchOutput ?? 'No output') . "\n", FILE_APPEND);
+    // First, configure Git to trust this repository
+    // The space after 'directory' is essential - this fixes the dubious ownership error
+    $configCommand = 'git config --global --add safe.directory ' . $projectPath . ' 2>&1';
+    $configOutput = shell_exec($configCommand);
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Git config output: " . ($configOutput ?? 'No output') . "\n", FILE_APPEND);
 
-    // Then try a soft reset - this approach sometimes works better with permission issues
-    // $resetCommand = 'cd ' . $projectPath . ' && git reset --mixed origin/main 2>&1';
-    // $resetOutput = shell_exec($resetCommand);
-    // file_put_contents($logFile, date('Y-m-d H:i:s') . " - Reset output: " . ($resetOutput ?? 'No output') . "\n", FILE_APPEND);
+    // Now try to pull the changes
+    $pullCommand = 'cd ' . $projectPath . ' && git pull 2>&1';
+    $pullOutput = shell_exec($pullCommand);
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Git pull output: " . ($pullOutput ?? 'No output') . "\n", FILE_APPEND);
 
     // Get information about what changed
+    $statusCommand = 'cd ' . $projectPath . ' && git status 2>&1';
+    $statusOutput = shell_exec($statusCommand);
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Git status output: " . ($statusOutput ?? 'No output') . "\n", FILE_APPEND);
     $logCommand = 'cd ' . $projectPath . ' && git status 2>&1';
     $logOutput = shell_exec($logCommand);
     file_put_contents($logFile, date('Y-m-d H:i:s') . " - Status output: " . ($logOutput ?? 'No output') . "\n", FILE_APPEND);
