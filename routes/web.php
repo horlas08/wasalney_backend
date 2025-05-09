@@ -30,11 +30,11 @@ Route::post('/simple-webhook', function() {
     // Run git commands
     $commands = [
         'cd ' . $projectPath,
-        'git pull ',
+        'git pull',
         'php artisan optimize:clear',
-        'php artisan config:cache',
-        'php artisan route:cache',
-        'php artisan view:cache'
+//        'php artisan config:cache',
+//        'php artisan route:cache',
+//        'php artisan view:cache'
     ];
 
     $commandString = implode(' && ', $commands);
