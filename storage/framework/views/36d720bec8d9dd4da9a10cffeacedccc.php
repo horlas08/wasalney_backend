@@ -1,1 +1,0 @@
-<?php /**PATH /home/qozeem/projects/web/wasalney/resources/views/admin-panel/layout/master.blade.php ENDPATH**/ ?>

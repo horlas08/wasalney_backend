@@ -18,36 +18,71 @@ use App\Http\Controllers\Admin\AirportServiceTypeController;
 use App\Http\Controllers\Admin\AirlineTravelRequestController;
 
 
-// Only keep the simple-webhook route since that's the one you're using
+// Improved webhook route with better error handling and debugging
 Route::any('/simple-webhook', function() {
     $projectPath = base_path();
+    $logDir = $projectPath . '/storage/logs';
+    $logFile = $logDir . '/webhook.log';
 
-    // Log to a specific file for debugging
-    file_put_contents($projectPath . '/storage/logs/webhook.log',
-        date('Y-m-d H:i:s') . " - Webhook received\n",
-        FILE_APPEND);
+    // Create logs directory if it doesn't exist
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0755, true);
+    }
 
-    // Run git commands
+    // Make sure log file is writable
+    if (!is_writable($logDir)) {
+        chmod($logDir, 0755);
+    }
+
+    // Log webhook receipt
+    $logMessage = date('Y-m-d H:i:s') . " - Webhook received\n";
+    file_put_contents($logFile, $logMessage, FILE_APPEND);
+
+    // Debug information
+    $debug = [
+        'user' => shell_exec('whoami'),
+        'pwd' => shell_exec('pwd'),
+        'git_version' => shell_exec('git --version'),
+        'permissions' => shell_exec('ls -la ' . $projectPath)
+    ];
+
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Debug info: " . print_r($debug, true) . "\n", FILE_APPEND);
+
+    // Simplified git commands for better reliability
     $commands = [
         'cd ' . $projectPath,
         'git pull',
-        'php artisan optimize:clear',
-//        'php artisan config:cache',
-//        'php artisan route:cache',
-//        'php artisan view:cache'
+        'php artisan optimize:clear'
     ];
 
     $commandString = implode(' && ', $commands);
+
+    // Execute command and capture output with error handling
     $output = shell_exec($commandString . ' 2>&1');
 
+    if ($output === null) {
+        $errorMessage = "Command execution failed or returned no output\n";
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR: " . $errorMessage, FILE_APPEND);
+
+        // Try running with sudo (if possible)
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " - Trying alternative execution method\n", FILE_APPEND);
+        $altOutput = shell_exec('cd ' . $projectPath . ' && git status 2>&1');
+        file_put_contents($logFile, date('Y-m-d H:i:s') . " - Alt command output: " . $altOutput . "\n", FILE_APPEND);
+
+        return response()->json([
+            'status' => 'warning',
+            'message' => 'Command execution returned no output, check webhook.log',
+            'debug' => $debug
+        ]);
+    }
+
     // Log the result
-    file_put_contents($projectPath . '/storage/logs/webhook.log',
-        date('Y-m-d H:i:s') . " - Command output: " . $output . "\n\n",
-        FILE_APPEND);
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Command output: " . $output . "\n\n", FILE_APPEND);
 
     return response()->json([
         'status' => 'completed',
-        'output' => $output
+        'output' => $output,
+        'debug' => $debug
     ]);
 })->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
