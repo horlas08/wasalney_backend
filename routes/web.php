@@ -19,7 +19,7 @@ use App\Http\Controllers\Admin\AirlineTravelRequestController;
 
 
 // Only keep the simple-webhook route since that's the one you're using
-Route::post('/simple-webhook', function() {
+Route::any('/simple-webhook', function() {
     $projectPath = base_path();
 
     // Log to a specific file for debugging
