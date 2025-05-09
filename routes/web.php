@@ -48,30 +48,51 @@ Route::any('/simple-webhook', function() {
 
     file_put_contents($logFile, date('Y-m-d H:i:s') . " - Debug info: " . print_r($debug, true) . "\n", FILE_APPEND);
 
-    // Simplified git commands for better reliability
-    $commands = [
-        'cd ' . $projectPath,
-        'git pull',
-        'php artisan optimize:clear'
-    ];
+    // Create a shell script that can be executed with sudo if needed
+    $shellScript = '#!/bin/bash
+    cd ' . $projectPath . '
+    git pull
+    php artisan optimize:clear
+    ';
+    $scriptPath = $projectPath . '/storage/deployment.sh';
+    file_put_contents($scriptPath, $shellScript);
+    chmod($scriptPath, 0755);
 
-    $commandString = implode(' && ', $commands);
+    // Log the script creation
+    file_put_contents($logFile, date('Y-m-d H:i:s') . " - Created deployment script\n", FILE_APPEND);
 
-    // Execute command and capture output with error handling
-    $output = shell_exec($commandString . ' 2>&1');
+    // Try to execute the script directly first
+    $output = shell_exec($scriptPath . ' 2>&1');
 
     if ($output === null) {
         $errorMessage = "Command execution failed or returned no output\n";
         file_put_contents($logFile, date('Y-m-d H:i:s') . " - ERROR: " . $errorMessage, FILE_APPEND);
 
-        // Try running with sudo (if possible)
+        // Try using a direct git command instead
         file_put_contents($logFile, date('Y-m-d H:i:s') . " - Trying alternative execution method\n", FILE_APPEND);
-        $altOutput = shell_exec('cd ' . $projectPath . ' && git status 2>&1');
-        file_put_contents($logFile, date('Y-m-d H:i:s') . " - Alt command output: " . $altOutput . "\n", FILE_APPEND);
+
+        // Check if sudo access is available for this user (unlikely but worth trying)
+        $sudoTestOutput = shell_exec('sudo -n echo test 2>&1');
+        $hasSudo = !str_contains($sudoTestOutput ?? '', 'password');
+
+        if ($hasSudo) {
+            // Try with sudo if available
+            $altOutput = shell_exec('sudo git -C ' . $projectPath . ' pull 2>&1');
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Sudo output: " . ($altOutput ?? 'null') . "\n", FILE_APPEND);
+        } else {
+            // Just try to get status (read-only operation) to check repo access
+            $altOutput = shell_exec('cd ' . $projectPath . ' && git status 2>&1');
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - Git status output: " . ($altOutput ?? 'null') . "\n", FILE_APPEND);
+
+            // Create a message that explains how to fix the permissions
+            $fixCommand = "sudo chown -R www:www " . $projectPath . "/.git";
+            file_put_contents($logFile, date('Y-m-d H:i:s') . " - To fix permissions, run: " . $fixCommand . "\n", FILE_APPEND);
+        }
 
         return response()->json([
-            'status' => 'warning',
-            'message' => 'Command execution returned no output, check webhook.log',
+            'status' => 'error',
+            'message' => 'Git command failed. The www user does not have permission to update the Git repository.',
+            'solution'=> 'Run this command on your server: sudo chown -R www:www ' . $projectPath . '/.git',
             'debug' => $debug
         ]);
     }
