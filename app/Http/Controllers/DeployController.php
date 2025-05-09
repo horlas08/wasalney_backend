@@ -13,61 +13,41 @@ class DeployController extends Controller
 {
     public function handle(Request $request)
     {
-        $secret = config('app.deploy_secret');
-
-        // Get the signature from either the request header or $_SERVER
-        // $signature = $request->header('X-Hub-Signature-256') ?? $_SERVER['HTTP_X_HUB_SIGNATURE_256'] ?? null;
-
-        // if (!$signature) {
-        //     Log::error('Deployment failed: No signature provided');
-        //     return response('No signature provided', 403);
-        // }
-
-        // // Get the payload
-        // $payload = $request->getContent();
-
-
-
-        // // Calculate the expected signature
-        // $expectedSignature = 'sha256=' . hash_hmac('sha256', $payload, $secret);
-        // Log::info("details", [
-        //     'testt'=>$payload,
-        //     'received' => $signature,
-        //         'expected' => $expectedSignature
-        // ]);
-        // // Verify the signature
-        // if (!hash_equals($expectedSignature, $signature)) {
-        //     Log::error('Deployment failed: Invalid signature', [
-        //         'received' => $signature,
-        //         'expected' => $expectedSignature
-        //     ]);
-        //     return response('Invalid signature', 403);
-        // }
-
-
         try {
-            // Get the project path from config
+            // Get the project path
             $projectPath = base_path();
 
-            // Execute git pull using Process facade
+            // Execute git pull command
             $process = Process::path($projectPath)
-                ->run('git pull');
+                ->run('cd ' . $projectPath . ' && git stash && git pull origin master');
 
             if (!$process->successful()) {
                 Log::error('Deployment failed: Git pull failed', ['output' => $process->output()]);
-                return response('Git pull failed: ' . $process->output(), 500);
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Git pull failed: ' . $process->output()
+                ], 500);
             }
 
-            // Clear Laravel cache
-            Artisan::call('cache:clear');
-            Artisan::call('config:clear');
-            Artisan::call('view:clear');
+            // Clear Laravel caches
+            Artisan::call('optimize:clear');
+            Artisan::call('config:cache');
+            Artisan::call('route:cache');
+            Artisan::call('view:cache');
 
             Log::info('Deployment successful', ['output' => $process->output()]);
-            return response('Deployment successful: ' . $process->output());
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Deployment successful',
+                'output' => $process->output()
+            ]);
+
         } catch (\Exception $e) {
             Log::error('Deployment failed: ' . $e->getMessage());
-            return response('Deployment failed: ' . $e->getMessage(), 500);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Deployment failed: ' . $e->getMessage()
+            ], 500);
         }
     }
 }
