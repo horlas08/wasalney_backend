@@ -94,6 +94,10 @@ Route::any('/simple-webhook', function() {
             'message' => 'Git command failed. The www user does not have permission to update the Git repository.',
             'solution'=> 'Run this command on your server: sudo chown -R www:www ' . $projectPath . '/.git',
             'debug' => $debug
+                    ])->withHeaders([
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => 'Sun, 02 Jan 1990 00:00:00 GMT'
         ]);
     }
 
@@ -104,6 +108,10 @@ Route::any('/simple-webhook', function() {
         'status' => 'completed',
         'output' => $output,
         'debug' => $debug
+    ])->withHeaders([
+        'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma' => 'no-cache',
+        'Expires' => 'Sun, 02 Jan 1990 00:00:00 GMT'
     ]);
 })->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
