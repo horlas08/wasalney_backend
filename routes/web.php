@@ -18,42 +18,8 @@ use App\Http\Controllers\Admin\AirportServiceTypeController;
 use App\Http\Controllers\Admin\AirlineTravelRequestController;
 
 
-Route::post('/deploy', [DeployController::class, 'handle']);
-Route::post('/webhook', [DeployController::class, 'handleWebhook']);
-Route::get('/webhook', [DeployController::class, 'handleWebhook']);
-
-Route::get('/check-git', function() {
-    // Simple direct shell check
-    $gitVersion = shell_exec('git --version 2>&1');
-    $whoami = shell_exec('whoami 2>&1');
-    $pwd = shell_exec('pwd 2>&1');
-    $path = getenv('PATH');
-
-    return response()->json([
-        'system' => PHP_OS,
-        'user' => $whoami,
-        'current_directory' => $pwd,
-        'path' => $path,
-        'git_version' => $gitVersion,
-        'php_version' => phpversion(),
-        'can_exec' => function_exists('shell_exec') && !in_array('shell_exec', explode(',', ini_get('disable_functions')))
-    ]);
-});
-
-// Very simple test endpoint that just executes git commands
-Route::get('/test-git', function() {
-    $projectPath = base_path();
-    $output = shell_exec('cd ' . $projectPath . ' && git status 2>&1');
-
-    return response()->json([
-        'success' => $output && strpos($output, 'fatal:') === false,
-        'output' => $output
-    ]);
-});
-
-// Super simple webhook endpoint using direct shell commands
-// This is a last resort if other methods fail
-Route::any('/simple-webhook', function() {
+// Only keep the simple-webhook route since that's the one you're using
+Route::post('/simple-webhook', function() {
     $projectPath = base_path();
 
     // Log to a specific file for debugging
@@ -83,6 +49,17 @@ Route::any('/simple-webhook', function() {
 
     return response()->json([
         'status' => 'completed',
+        'output' => $output
+    ]);
+})->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
+
+// Keep this test route for checking git status
+Route::get('/test-git', function() {
+    $projectPath = base_path();
+    $output = shell_exec('cd ' . $projectPath . ' && git status 2>&1');
+
+    return response()->json([
+        'success' => $output && strpos($output, 'fatal:') === false,
         'output' => $output
     ]);
 });
