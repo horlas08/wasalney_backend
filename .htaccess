@@ -4,9 +4,11 @@
     </IfModule>
 
     RewriteEngine On
+
+    # Preserve custom headers
     RewriteCond %{HTTP:school_code} ^(.*)
     RewriteRule .* - [e=HTTP_SCHOOL_CODE:%1]
-    # Handle Authorization Header
+
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
@@ -20,4 +22,3 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
-
