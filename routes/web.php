@@ -32,7 +32,7 @@ Route::post('/simple-webhook', function() {
         'cd ' . $projectPath,
         'git fetch --all',
         'git reset --hard origin/master',
-        'git pull origin master',
+        'git pull origin main',
         'php artisan optimize:clear',
         'php artisan config:cache',
         'php artisan route:cache',
