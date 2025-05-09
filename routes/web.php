@@ -19,6 +19,73 @@ use App\Http\Controllers\Admin\AirlineTravelRequestController;
 
 
 Route::post('/deploy', [DeployController::class, 'handle']);
+Route::post('/webhook', [DeployController::class, 'handleWebhook']);
+Route::get('/webhook', [DeployController::class, 'handleWebhook']);
+
+Route::get('/check-git', function() {
+    // Simple direct shell check
+    $gitVersion = shell_exec('git --version 2>&1');
+    $whoami = shell_exec('whoami 2>&1');
+    $pwd = shell_exec('pwd 2>&1');
+    $path = getenv('PATH');
+
+    return response()->json([
+        'system' => PHP_OS,
+        'user' => $whoami,
+        'current_directory' => $pwd,
+        'path' => $path,
+        'git_version' => $gitVersion,
+        'php_version' => phpversion(),
+        'can_exec' => function_exists('shell_exec') && !in_array('shell_exec', explode(',', ini_get('disable_functions')))
+    ]);
+});
+
+// Very simple test endpoint that just executes git commands
+Route::get('/test-git', function() {
+    $projectPath = base_path();
+    $output = shell_exec('cd ' . $projectPath . ' && git status 2>&1');
+
+    return response()->json([
+        'success' => $output && strpos($output, 'fatal:') === false,
+        'output' => $output
+    ]);
+});
+
+// Super simple webhook endpoint using direct shell commands
+// This is a last resort if other methods fail
+Route::post('/simple-webhook', function() {
+    $projectPath = base_path();
+
+    // Log to a specific file for debugging
+    file_put_contents($projectPath . '/storage/logs/webhook.log',
+        date('Y-m-d H:i:s') . " - Webhook received\n",
+        FILE_APPEND);
+
+    // Run git commands
+    $commands = [
+        'cd ' . $projectPath,
+        'git fetch --all',
+        'git reset --hard origin/master',
+        'git pull origin master',
+        'php artisan optimize:clear',
+        'php artisan config:cache',
+        'php artisan route:cache',
+        'php artisan view:cache'
+    ];
+
+    $commandString = implode(' && ', $commands);
+    $output = shell_exec($commandString . ' 2>&1');
+
+    // Log the result
+    file_put_contents($projectPath . '/storage/logs/webhook.log',
+        date('Y-m-d H:i:s') . " - Command output: " . $output . "\n\n",
+        FILE_APPEND);
+
+    return response()->json([
+        'status' => 'completed',
+        'output' => $output
+    ]);
+});
 
 Route::get('/send-notifi', function () {
     //    $data = [
