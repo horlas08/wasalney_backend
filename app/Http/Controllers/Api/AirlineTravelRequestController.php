@@ -49,7 +49,7 @@ class AirlineTravelRequestController extends Controller
 
         return (new AirlineTravelRequestResource($travelRequest))
             ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**
