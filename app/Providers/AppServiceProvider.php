@@ -38,11 +38,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        if (env('APP_ENV') === 'production' || env('APP_FORCE_HTTPS') === 'true') {
-//            if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-//                \URL::forceScheme('https');
-//            }
-//        }
+        if (env('APP_ENV') === 'production' || env('APP_FORCE_HTTPS') === 'true') {
+            if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+                \URL::forceScheme('https');
+            }
+        }
         if(!Response::hasMacro('api'))
             Response::macro('api', function ($data, $message=null, $statusCode=200) {
                 return Response::json([
