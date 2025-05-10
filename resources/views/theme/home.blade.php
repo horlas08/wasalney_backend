@@ -26,9 +26,6 @@
     </header>
 
     <section id="banner" style="background-image: url('/theme/img/transport.svg');"></section>
-
-
-
         <section id="services">
             <div class="service">
                 <i class="fas fa-user-shield service-icon"></i>

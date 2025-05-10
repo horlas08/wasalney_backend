@@ -8,6 +8,9 @@ use App\Http\Controllers\ProviderApi\PaymentController;
 use App\Http\Controllers\ProviderApi\AddressApiController;
 use App\Http\Controllers\ProviderApi\OrderApiController;
 use App\Http\Controllers\ProviderApi\AgencyApiController;
+use App\Http\Controllers\Api\AirportBookingController;
+use App\Http\Controllers\Api\TourBookingController;
+use App\Http\Controllers\Api\AirlineTravelRequestController;
 
 //user
 Route::post('user/login', [UserApiController::class, "login"]);
@@ -86,4 +89,25 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('order/getMessage', [OrderApiController::class, "getMesssage"]);
     Route::post('order/sendMessage', [OrderApiController::class, "sendMesssage"]);
 
+
+    // Airport Taxi Service Routes
+    Route::get('/airport/service-types', [AirportBookingController::class, 'getServiceTypes']);
+    Route::post('/airport/bookings', [AirportBookingController::class, 'store']);
+    Route::get('/airport/bookings', [AirportBookingController::class, 'getUserBookings']);
+    Route::get('/airport/bookings/{booking}', [AirportBookingController::class, 'getBookingDetails']);
+    Route::post('/airport/bookings/{booking}/cancel', [AirportBookingController::class, 'cancel']);
+
+    // Tour Booking Routes
+    Route::get('/tour/destinations', [TourBookingController::class, 'getDestinations']);
+    Route::post('/tour/bookings', [TourBookingController::class, 'store']);
+    Route::get('/tour/bookings', [TourBookingController::class, 'getUserBookings']);
+    Route::get('/tour/bookings/{booking}', [TourBookingController::class, 'getBookingDetails']);
+    Route::post('/tour/bookings/{booking}/cancel', [TourBookingController::class, 'cancel']);
+
+    // Airline Travel Request Routes
+    Route::get('/airline/requests', [AirlineTravelRequestController::class, 'index']);
+    Route::post('/airline/requests', [AirlineTravelRequestController::class, 'store']);
+    Route::get('/airline/requests/{request}', [AirlineTravelRequestController::class, 'show']);
+    Route::put('/airline/requests/{request}', [AirlineTravelRequestController::class, 'update']);
+    Route::post('/airline/requests/{request}/cancel', [AirlineTravelRequestController::class, 'cancel']);
 });

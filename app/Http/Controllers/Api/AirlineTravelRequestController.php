@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\AirlineTravelRequest;
+use App\Models\AirlineTravel;
 use Illuminate\Http\Request;
 use App\Http\Resources\AirlineTravelRequestResource;
-use App\Http\Requests\AirlineTravelRequestRequest;
+use App\Http\Requests\AirlineTravelRequest;
 use Illuminate\Http\Response;
 
 class AirlineTravelRequestController extends Controller
@@ -19,7 +19,7 @@ class AirlineTravelRequestController extends Controller
      */
     public function index(Request $request)
     {
-        $requests = AirlineTravelRequest::where('user_id', $request->user()->id)
+        $requests = AirlineTravel::where('user_id', $request->user()->id)
             ->latest()
             ->paginate(10);
 
@@ -29,12 +29,12 @@ class AirlineTravelRequestController extends Controller
     /**
      * Store a new travel request
      *
-     * @param AirlineTravelRequestRequest $request
+     * @param AirlineTravelRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(AirlineTravelRequestRequest $request)
+    public function store(AirlineTravelRequest $request)
     {
-        $travelRequest = AirlineTravelRequest::create([
+        $travelRequest = AirlineTravel::create([
             'user_id' => $request->user()->id,
             'departure_city' => $request->departure_city,
             'arrival_city' => $request->arrival_city,
@@ -55,10 +55,10 @@ class AirlineTravelRequestController extends Controller
     /**
      * Display the specified travel request
      *
-     * @param AirlineTravelRequest $request
+     * @param AirlineTravel $request
      * @return AirlineTravelRequestResource
      */
-    public function show(AirlineTravelRequest $request)
+    public function show(AirlineTravel $request)
     {
         $this->authorize('view', $request);
         return new AirlineTravelRequestResource($request);
@@ -67,11 +67,11 @@ class AirlineTravelRequestController extends Controller
     /**
      * Update the travel request
      *
-     * @param AirlineTravelRequestRequest $request
-     * @param AirlineTravelRequest $travelRequest
+     * @param AirlineTravelRequest $request
+     * @param AirlineTravel $travelRequest
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(AirlineTravelRequestRequest $request, AirlineTravelRequest $travelRequest)
+    public function update(AirlineTravelRequest $request, AirlineTravel $travelRequest)
     {
         $this->authorize('update', $travelRequest);
 
@@ -85,10 +85,10 @@ class AirlineTravelRequestController extends Controller
     /**
      * Cancel the travel request
      *
-     * @param AirlineTravelRequest $request
+     * @param AirlineTravel $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function cancel(AirlineTravelRequest $request)
+    public function cancel(AirlineTravel $request)
     {
         $this->authorize('cancel', $request);
 

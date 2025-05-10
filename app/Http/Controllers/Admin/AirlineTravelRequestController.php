@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AirlineTravelRequest;
+use App\Models\AirlineTravel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -14,7 +14,7 @@ class AirlineTravelRequestController extends Controller
      */
     public function index()
     {
-        $requests = AirlineTravelRequest::with('user')
+        $requests = AirlineTravel::with('user')
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
@@ -26,7 +26,7 @@ class AirlineTravelRequestController extends Controller
      */
     public function show($id)
     {
-        $request = AirlineTravelRequest::with('user')->findOrFail($id);
+        $request = AirlineTravel::with('user')->findOrFail($id);
         return view('admin-panel.airline-travel.show', compact('request'));
     }
 
@@ -45,7 +45,7 @@ class AirlineTravelRequestController extends Controller
         }
 
         try {
-            $travelRequest = AirlineTravelRequest::findOrFail($id);
+            $travelRequest = AirlineTravel::findOrFail($id);
             $travelRequest->update([
                 'status' => $request->status,
                 'admin_notes' => $request->admin_notes
