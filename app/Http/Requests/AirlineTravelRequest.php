@@ -100,7 +100,7 @@ class AirlineTravelRequest extends FormRequest
         if ($this->expectsJson() || $this->is('api/*')) {
             throw new HttpResponseException(response()->json([
                 'success' => false,
-                'message' => 'Validation errors',
+                'message' => $validator->errors()->first(),
                 'errors' => $validator->errors()
             ], 422));
         }
