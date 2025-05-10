@@ -32,7 +32,8 @@ class AirlineTravelRequestController extends Controller
      * @param AirlineTravelRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(AirlineTravelRequest $request)
+
+    public function store(Request $request)
     {
         $travelRequest = AirlineTravel::create([
             'user_id' => $request->user()->id,
