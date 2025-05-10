@@ -4,6 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AirlineTravelRequest extends FormRequest
 {
@@ -82,5 +84,28 @@ class AirlineTravelRequest extends FormRequest
             'special_requirements' => $this->special_requirements ?: null,
             'return_date' => $this->return_date ?: null,
         ]);
+    }
+
+    /**
+     * Handle a failed validation attempt for API requests.
+     *
+     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @return void
+     *
+     * @throws \Illuminate\Http\Exceptions\HttpResponseException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        // If this is an API request, return JSON error response instead of redirecting
+        if ($this->expectsJson() || $this->is('api/*')) {
+            throw new HttpResponseException(response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422));
+        }
+
+        // Otherwise, let the parent handle it (which will likely redirect)
+        parent::failedValidation($validator);
     }
 }
