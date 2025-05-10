@@ -90,7 +90,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ArSupportTableSeeder::class);
         $this->call(ArTaxiOptionsTableSeeder::class);
         $this->call(ArTermsAndConditionsTableSeeder::class);
-        $this->call(ArTestTableSeeder::class);
+//        $this->call(ArTestTableSeeder::class);
         $this->call(ArTransactionTypesTableSeeder::class);
         $this->call(ArTypeParcelTableSeeder::class);
         $this->call(ArUsersTableSeeder::class);
@@ -111,13 +111,14 @@ class DatabaseSeeder extends Seeder
         $this->call(PersonalAccessTokensTableSeeder::class);
         $this->call(RelationConditionsTableSeeder::class);
         $this->call(RelationsTableSeeder::class);
-        $this->call(ReportsTableSeeder::class);
+//        $this->call(ReportsTableSeeder::class);
         $this->call(RoutesTableSeeder::class);
         $this->call(SettingsTableSeeder::class);
-        $this->call(TrashesTableSeeder::class);
+//        $this->call(TrashesTableSeeder::class);
         $this->call(UserAccessesTableSeeder::class);
         $this->call(UserRolesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(VisitsTableSeeder::class);
+        $this->call(TourDestinationSeeder::class);
     }
 }
