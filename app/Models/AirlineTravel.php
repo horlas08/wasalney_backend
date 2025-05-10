@@ -10,6 +10,7 @@ class AirlineTravel extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'airline_travels';
     protected $fillable = [
         'user_id',
         'departure_city',
