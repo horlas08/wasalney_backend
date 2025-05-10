@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('airline_travel_requests', function (Blueprint $table) {
+        Schema::create('airline_travels', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('departure_city');
@@ -40,4 +40,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('airline_travel_requests');
     }
-}; 
+};

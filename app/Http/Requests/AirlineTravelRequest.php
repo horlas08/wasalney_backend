@@ -37,7 +37,7 @@ class AirlineTravelRequest extends FormRequest
         ];
 
         // Add return_date validation only if it's a round trip
-        if ($this->input('trip_type') === 'round_trip') {
+       if ($this->input('trip_type') === 'round_trip') {
             $rules['return_date'] = ['required', 'date', 'after_or_equal:departure_date'];
         } else {
             $rules['return_date'] = ['nullable', 'date'];
