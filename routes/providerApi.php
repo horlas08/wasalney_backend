@@ -109,5 +109,5 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('/airline/requests', [AirlineTravelRequestController::class, 'store']);
     Route::get('/airline/requests/{request}', [AirlineTravelRequestController::class, 'show']);
     Route::put('/airline/requests/{request}', [AirlineTravelRequestController::class, 'update']);
-    Route::post('/airline/requests/{request}/cancel', [AirlineTravelRequestController::class, 'cancel']);
+    Route::post('/airline/requests/{airlineTravel}/cancel', [AirlineTravelRequestController::class, 'cancel']);
 });

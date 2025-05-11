@@ -85,16 +85,16 @@ class AirlineTravelRequestController extends Controller
     /**
      * Cancel the travel request
      *
-     * @param AirlineTravel $request
+     * @param AirlineTravel $airlineTravel
      * @return \Illuminate\Http\JsonResponse
      */
-    public function cancel(AirlineTravel $request)
+    public function cancel(AirlineTravel $airlineTravel)
     {
-        $this->authorize('cancel', $request);
+        $this->authorize('cancel', $airlineTravel);
 
-        $request->update(['status' => 'cancelled']);
+        $airlineTravel->update(['status' => 'cancelled']);
 
-        return (new AirlineTravelRequestResource($request))
+        return (new AirlineTravelRequestResource($airlineTravel))
             ->response()
             ->setStatusCode(Response::HTTP_OK);
     }
