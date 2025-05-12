@@ -423,9 +423,10 @@ class UserApiController extends Controller
         try {
             $user = $request->user();
 //            $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
-            $infoUser = db('drivers')->where('id', $user->record_id)->update(['image' => $request->file]);
-
+            $infoUser = db('drivers')->where('id', $user->record_id)->first();
             if($infoUser){
+                $infoUser->image =  $request->file;
+                $infoUser->save();
                 $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
 
                 $driver->credit = driverCredit($driver->wallet);
@@ -435,6 +436,8 @@ class UserApiController extends Controller
 
                 return response()->api($driver);
             }
+
+
 //            if ($infoUser->status == true) {
 //                $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
 //
@@ -455,7 +458,7 @@ class UserApiController extends Controller
 //                return response()->api($driver, $infoUser->message, 400);
 //
 //            }
-            return response()->api(null,__('خطا'), 400);
+            return response()->api(null,__(':something went wrongخطا'), 400);
         } catch (\Exception $e) {
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
         }
