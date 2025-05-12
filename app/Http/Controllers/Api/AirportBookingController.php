@@ -110,7 +110,7 @@ class AirportBookingController extends Controller
             return response()->api($booking->load(['flightDetails', 'luggageDetails', 'serviceType']));
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->api(null, __('Error occurred while processing your request.'), 500);
+            return response()->api(null, __($e->getMessage()), 500);
         }
     }
 
