@@ -31,7 +31,7 @@ return new class extends Migration
             $table->integer('certificate_type')->nullable();
             $table->integer('type_activity')->nullable();
             $table->tinyInteger('state')->nullable();
-            $table->string('image')->nullable();
+            $table->text('image')->nullable();
             $table->date('certificat_date')->nullable();
             $table->string('certificate_validity')->nullable();
             $table->integer('level')->nullable();
