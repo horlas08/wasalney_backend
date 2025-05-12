@@ -461,6 +461,7 @@ class UserApiController extends Controller
             return response()->api(null,__(':something went wrongخطا'), 400);
         } catch (\Exception $e) {
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
+            return response()->api(null,__($e->getMessage()), 400);
         }
         return response()->api(null,__('خطا'), 400);
     }
