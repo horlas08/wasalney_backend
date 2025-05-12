@@ -530,7 +530,7 @@ class UserApiController extends Controller
 //            }
         } catch (\Exception $e) {
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
-            return response()->api(null, __('خطأ'), 400);
+            return response()->api(['status' => false, 'message' => __("خطأ")], 401);
         }
     }
     function updateDocuments(Request $request)
