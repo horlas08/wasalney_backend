@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('mobile')->nullable();
             $table->string('verify_code')->nullable();
-            $table->string('image')->nullable();
+            $table->text('image')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('notif_token')->nullable();
             $table->string('code')->nullable();
