@@ -280,7 +280,7 @@ class UserApiController extends Controller
             $user = $request->user();
 
             $infoUser = db('users')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
-            return ['user'=>$user,'infoUser'=>$infoUser, 'status' => $infoUser->status, 'message' => $infoUser->message];
+
             if ($infoUser->status == true) {
                 $u = db('users')->findRecord($infoUser->data->id);
                 return response()->api($u);
@@ -290,6 +290,7 @@ class UserApiController extends Controller
             }
 
         } catch (\Exception $e) {
+            \Log::info('test', [$e->getMessage()]);
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
         }
         return response()->api(null, __('خطا'), 400);

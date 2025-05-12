@@ -21,7 +21,8 @@
         "niklasravnsborg/laravel-pdf": "^4.1",
         "orangehill/iseed": "^3.1",
         "pion/laravel-chunk-upload": "^1.5",
-        "shetabit/payment": "^5.4"
+        "shetabit/payment": "^5.4",
+        "ext-fileinfo": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

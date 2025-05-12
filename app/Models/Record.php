@@ -653,6 +653,7 @@ class Record extends Model
             $validator=self::validator($lang,$fields,$request,$id,$userRole,$user);
 
             if($validator->fails()){
+                \Log::info("validator message" ,[$validator->errors() ,$validator->messages()->all()]);
                 $result['status']=false;
                 $result['message']=$validator->messages()->all();
                 $result['data']=$request->toArray();
