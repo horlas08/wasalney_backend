@@ -488,7 +488,12 @@ class UserApiController extends Controller
 
             // تحديث مسار الصورة في قاعدة البيانات
             $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $relativePath]);
-
+            $infoUser = MyDrivers::where('id', $user->record_id)->first();
+            if($infoUser){
+                $infoUser->update([
+                    'image' => $relativePath
+                ]);
+            }
             // جلب البيانات الكاملة بعد التحديث
             $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($user->record_id);
             $driver->credit = driverCredit($driver->wallet);
@@ -498,24 +503,31 @@ class UserApiController extends Controller
 
             // تحديث مسار الصورة في كائن driver مباشرة قبل إرجاعه
             $driver->image = $relativePath;
-
-            // إرجاع المسار الصحيح في الاستجابة
-            if ($infoUser->status == true) {
-                return response()->api([
-                    'status' => true,
-                    'message' => 'تمت العملية بنجاح.',
-                    'data' => [
-                        'driver' => $driver,
-                        'image' => $relativePath
-                    ]
-                ]);
-            } else {
-                return response()->api([
-                    'status' => false,
-                    'message' => $infoUser->message,
-                    'data' => $driver
-                ], 400);
-            }
+            return response()->api([
+                'status' => true,
+                'message' => 'تمت العملية بنجاح.',
+                'data' => [
+                    'driver' => $driver,
+                    'image' => $relativePath
+                ]
+            ]);
+//            // إرجاع المسار الصحيح في الاستجابة
+//            if ($infoUser->status == true) {
+//                return response()->api([
+//                    'status' => true,
+//                    'message' => 'تمت العملية بنجاح.',
+//                    'data' => [
+//                        'driver' => $driver,
+//                        'image' => $relativePath
+//                    ]
+//                ]);
+//            } else {
+//                return response()->api([
+//                    'status' => false,
+//                    'message' => $infoUser->message,
+//                    'data' => $driver
+//                ], 400);
+//            }
         } catch (\Exception $e) {
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
             return response()->api(null, __('خطأ'), 400);
