@@ -469,7 +469,7 @@ class UserApiController extends Controller
     {
         try {
             $user = $request->user();
-
+            return  $user;
             // التأكد من وجود الملف
             if (!$request->hasFile('file')) {
                 return response()->api(null, 'لم يتم إرسال الصورة', 400);
