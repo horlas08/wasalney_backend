@@ -132,7 +132,7 @@ class VerificationSms
             try {
         $client = new \GuzzleHttp\Client();
         $headers = [
-            'Authorization' => 'Bearer 227|ifcn7qFlbS3ZJR29fqEzl7GGg50IgC3Ud2iJEXng4aefdfc7',
+            'Authorization' => 'Bearer 357|yGoKmA5lqEPLknxveDe3tRaTlbAtD8kQ5MXGuZQv2b2cd8aa ',
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'
         ];
