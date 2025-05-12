@@ -418,100 +418,100 @@ class UserApiController extends Controller
         return response()->api(null,__('خطا'), 400);
     }
 
-//    function updateAvatar(Request $request)
-//    {
-//        try {
-//            $user = $request->user();
-//            $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
-//
-//            if ($infoUser->status == true) {
-//                $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
-//
-//                $driver->credit = driverCredit($driver->wallet);
-//                $driver->unremovable = removable($driver->id)-driverCredit($driver->wallet);
-//                $driver->removable = removable($driver->id);
-//                $driver->yesterday_statistics = dailyReport($driver->id, getDateDay(1));
-//
-//                return response()->api($driver);
-//            }
-//            else {
-//                $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
-//
-//                $driver->credit = driverCredit($driver->wallet);
-//                $driver->unremovable = removable($driver->id)-driverCredit($driver->wallet);
-//                $driver->removable = removable($driver->id);
-//                $driver->yesterday_statistics = dailyReport($driver->id, getDateDay(1));
-//                return response()->api($driver, $infoUser->message, 400);
-//
-//            }
-//
-//        } catch (\Exception $e) {
-//            Storage::disk('file')->append('logApi.txt', $e->getMessage());
-//        }
-//        return response()->api(null,__('خطا'), 400);
-//    }
     function updateAvatar(Request $request)
     {
         try {
             $user = $request->user();
+            $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
 
-            // التأكد من وجود الملف
-            if (!$request->hasFile('file')) {
-                return response()->api(null, 'لم يتم إرسال الصورة', 400);
-            }
-
-            // حفظ الصورة داخل `public/files/drivers/image`
-            $file = $request->file('file');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-
-            // المسار الفعلي للتخزين
-            $storagePath = 'files/drivers/image';
-            $file->move(public_path($storagePath), $filename);
-
-            // المسار المطلوب للتخزين في قاعدة البيانات
-            $relativePath = public_path($storagePath)."/$filename";
-
-            // تحديث مسار الصورة في قاعدة البيانات
-            $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $relativePath]);
-
-            // جلب البيانات الكاملة بعد التحديث
-            $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($user->record_id);
-            $driver->credit = driverCredit($driver->wallet);
-            $driver->unremovable = removable($driver->id) - driverCredit($driver->wallet);
-            $driver->removable = removable($driver->id);
-            $driver->yesterday_statistics = dailyReport($driver->id, getDateDay(1));
-
-            // تحديث مسار الصورة في كائن driver مباشرة قبل إرجاعه
-            $driver->image = $relativePath;
-
-            // إرجاع المسار الصحيح في الاستجابة
             if ($infoUser->status == true) {
-                return response()->api([
-                    'status' => true,
-                    'message' => 'تمت العملية بنجاح.',
-                    'data' => [
-                        'driver' => $driver,
-                        'image' => $relativePath
-                    ]
-                ]);
-            } else {
-                return response()->api([
-                    'status' => false,
-                    'message' => $infoUser->message,
-                    'data' => $driver
-                ], 400);
+                $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
+
+                $driver->credit = driverCredit($driver->wallet);
+                $driver->unremovable = removable($driver->id)-driverCredit($driver->wallet);
+                $driver->removable = removable($driver->id);
+                $driver->yesterday_statistics = dailyReport($driver->id, getDateDay(1));
+
+                return response()->api($driver);
             }
+            else {
+                $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
+
+                $driver->credit = driverCredit($driver->wallet);
+                $driver->unremovable = removable($driver->id)-driverCredit($driver->wallet);
+                $driver->removable = removable($driver->id);
+                $driver->yesterday_statistics = dailyReport($driver->id, getDateDay(1));
+                return response()->api($driver, $infoUser->message, 400);
+
+            }
+
         } catch (\Exception $e) {
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
-            return response()->api(null, __('خطأ'), 400);
         }
+        return response()->api(null,__('خطا'), 400);
     }
-//    function updateDocuments(Request $request)
+//    function updateAvatar(Request $request)
 //    {
-//        $user = $request->user();
-//        $infoUser = db('documents')->parent('drivers',$user->record_id)->updateRecord(['on_certificate' => $request->file,'on_car_card'=>$request->d,'back_car_card'=>$request->s]);
+//        try {
+//            $user = $request->user();
 //
+//            // التأكد من وجود الملف
+//            if (!$request->hasFile('file')) {
+//                return response()->api(null, 'لم يتم إرسال الصورة', 400);
+//            }
+//
+//            // حفظ الصورة داخل `public/files/drivers/image`
+//            $file = $request->file('file');
+//            $filename = time() . '.' . $file->getClientOriginalExtension();
+//
+//            // المسار الفعلي للتخزين
+//            $storagePath = 'files/drivers/image';
+//            $file->move(public_path($storagePath), $filename);
+//
+//            // المسار المطلوب للتخزين في قاعدة البيانات
+//            $relativePath = public_path($storagePath)."/$filename";
+//
+//            // تحديث مسار الصورة في قاعدة البيانات
+//            $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $relativePath]);
+//
+//            // جلب البيانات الكاملة بعد التحديث
+//            $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($user->record_id);
+//            $driver->credit = driverCredit($driver->wallet);
+//            $driver->unremovable = removable($driver->id) - driverCredit($driver->wallet);
+//            $driver->removable = removable($driver->id);
+//            $driver->yesterday_statistics = dailyReport($driver->id, getDateDay(1));
+//
+//            // تحديث مسار الصورة في كائن driver مباشرة قبل إرجاعه
+//            $driver->image = $relativePath;
+//
+//            // إرجاع المسار الصحيح في الاستجابة
+//            if ($infoUser->status == true) {
+//                return response()->api([
+//                    'status' => true,
+//                    'message' => 'تمت العملية بنجاح.',
+//                    'data' => [
+//                        'driver' => $driver,
+//                        'image' => $relativePath
+//                    ]
+//                ]);
+//            } else {
+//                return response()->api([
+//                    'status' => false,
+//                    'message' => $infoUser->message,
+//                    'data' => $driver
+//                ], 400);
+//            }
+//        } catch (\Exception $e) {
+//            Storage::disk('file')->append('logApi.txt', $e->getMessage());
+//            return response()->api(null, __('خطأ'), 400);
+//        }
 //    }
+    function updateDocuments(Request $request)
+    {
+        $user = $request->user();
+        $infoUser = db('documents')->parent('drivers',$user->record_id)->updateRecord(['on_certificate' => $request->file,'on_car_card'=>$request->d,'back_car_card'=>$request->s]);
+
+    }
     function bankInfo(Request $request)
     {
         try {
