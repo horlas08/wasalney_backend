@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Models\MyDrivers;
 use App\Models\User;
 use Cassandra\Collection;
 use Illuminate\Http\Request;
@@ -424,9 +425,8 @@ class UserApiController extends Controller
             $user = $request->user();
 //            $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
             $infoUser = db('drivers')->where('id', $user->record_id)->first();
+            $infoUser = MyDrivers::where('id', $user->record_id)->update(['image'=> $request->file]);
             if($infoUser){
-                $infoUser->image =  $request->file;
-                $infoUser->save();
                 $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($infoUser->data->id);
 
                 $driver->credit = driverCredit($driver->wallet);
