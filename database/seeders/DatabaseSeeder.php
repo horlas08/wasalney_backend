@@ -120,5 +120,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(VisitsTableSeeder::class);
         $this->call(TourDestinationSeeder::class);
+        $this->call(AirportServiceTypeSeeder::class);
+
     }
 }
