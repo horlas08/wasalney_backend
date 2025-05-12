@@ -278,6 +278,7 @@ class UserApiController extends Controller
     {
         try {
             $user = $request->user();
+
             $infoUser = db('users')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
             if ($infoUser->status == true) {
                 $u = db('users')->findRecord($infoUser->data->id);
