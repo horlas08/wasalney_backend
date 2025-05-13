@@ -487,7 +487,9 @@ class UserApiController extends Controller
             $relativePath = public_path($storagePath)."/$filename";
 
             // تحديث مسار الصورة في قاعدة البيانات
-            $infoUser = db('drivers')->where('id', $user->record_id)->updateRecord(['image' => $relativePath]);
+//            $infoUser = db('drivers')
+//                ->where('id', $user->record_id)
+//                ->updateRecord(['image' => $relativePath]);
             $infoUser = MyDrivers::where('id', $user->record_id)->first();
             if($infoUser){
                 $infoUser->update([
