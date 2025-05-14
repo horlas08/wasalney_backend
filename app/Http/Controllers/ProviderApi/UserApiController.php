@@ -303,20 +303,13 @@ class UserApiController extends Controller
 //
 //            }
 //            $iUser->image = $relativePath;
-            return response()->api([
-                'status' => true,
-                'message' => 'تمت العملية بنجاح.',
-                'data' => [
-                    'user' => $iUser,
-                    'image' => $relativePath
-                ]
-            ]);
+            return response()->api($user);
         } catch (\Exception $e) {
             \Log::info('test', [$e->getMessage()]);
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
             return response()->api(['status' => false, 'message' => $e->getMessage()], 401);
         }
-        return response()->api(null, __('خطا'), 400);
+
     }
 
     function chargeWallet(Request $request)
