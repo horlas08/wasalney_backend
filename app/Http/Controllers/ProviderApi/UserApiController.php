@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ProviderApi;
 
+use App\Models\MyUsers;
 use App\Models\VerificationSms;
 
 use App\Models\User;
@@ -279,16 +280,37 @@ class UserApiController extends Controller
         try {
             $user = $request->user();
 
-            $infoUser = db('users')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
-
-            if ($infoUser->status == true) {
-                $u = db('users')->findRecord($infoUser->data->id);
-                return response()->api($u);
-            } else {
-                return response()->api($infoUser->data, $infoUser->message, 400);
-
+//            $infoUser = db('users')->where('id', $user->record_id)->updateRecord(['image' => $request->file]);
+            if (!$request->hasFile('file')) {
+                return response()->api(null, 'لم يتم إرسال الصورة', 400);
             }
-
+            $file = $request->file('file');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $storagePath = '/files/users/image';
+            $file->move(base_path($storagePath), $filename);
+            $relativePath = $storagePath."/$filename";
+            $iUser = MyUsers::where('id', $user->record_id)->first();
+            if($iUser){
+                $iUser->update([
+                    'image' => 'users/image/'.$filename
+                ]);
+            }
+//            if ($infoUser->status == true) {
+//                $u = db('users')->findRecord($infoUser->data->id);
+//                return response()->api($u);
+//            } else {
+//                return response()->api($infoUser->data, $infoUser->message, 400);
+//
+//            }
+//            $iUser->image = $relativePath;
+            return response()->api([
+                'status' => true,
+                'message' => 'تمت العملية بنجاح.',
+                'data' => [
+                    'user' => $iUser,
+                    'image' => $relativePath
+                ]
+            ]);
         } catch (\Exception $e) {
             \Log::info('test', [$e->getMessage()]);
             Storage::disk('file')->append('logApi.txt', $e->getMessage());

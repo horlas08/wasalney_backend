@@ -490,7 +490,7 @@ class UserApiController extends Controller
 //            $infoUser = db('drivers')
 //                ->where('id', $user->record_id)
 //                ->updateRecord(['image' => $relativePath]);
-            $infoUser = MyDrivers::where('id', $user->record_id)->first();
+             $infoUser = MyDrivers::where('id', $user->record_id)->first();
             if($infoUser){
                 $infoUser->update([
                     'image' => 'drivers/image/'.$filename
