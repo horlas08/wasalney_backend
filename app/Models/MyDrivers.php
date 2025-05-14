@@ -11,6 +11,7 @@ class MyDrivers extends Model
     {
         $this->table = getLang().'_drivers';
     }
+    protected $guarded = [];
     //start
     protected $appends = ['rate'];
     public function getRateAttribute()
