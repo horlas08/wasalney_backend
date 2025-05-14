@@ -314,6 +314,7 @@ class UserApiController extends Controller
         } catch (\Exception $e) {
             \Log::info('test', [$e->getMessage()]);
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
+            return response()->api(['status' => false, 'message' => $e->getMessage()], 401);
         }
         return response()->api(null, __('خطا'), 400);
     }
