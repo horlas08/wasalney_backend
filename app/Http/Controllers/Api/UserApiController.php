@@ -484,7 +484,7 @@ class UserApiController extends Controller
             $file->move(base_path($storagePath), $filename);
 
             // المسار المطلوب للتخزين في قاعدة البيانات
-            $relativePath = public_path($storagePath)."/$filename";
+            $relativePath = $storagePath."/$filename";
 
             // تحديث مسار الصورة في قاعدة البيانات
 //            $infoUser = db('drivers')
@@ -497,7 +497,9 @@ class UserApiController extends Controller
                 ]);
             }
             // جلب البيانات الكاملة بعد التحديث
-            $driver = db('drivers')->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])->findRecord($user->record_id);
+            $driver = db('drivers')
+                ->withRelations(['documents', 'car_details', 'wallet', 'info_bank'])
+                ->findRecord($user->record_id);
             $driver->credit = driverCredit($driver->wallet);
             $driver->unremovable = removable($driver->id) - driverCredit($driver->wallet);
             $driver->removable = removable($driver->id);
