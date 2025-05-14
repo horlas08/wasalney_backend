@@ -480,8 +480,8 @@ class UserApiController extends Controller
             $filename = time() . '.' . $file->getClientOriginalExtension();
 
             // المسار الفعلي للتخزين
-            $storagePath = 'files/drivers/image';
-            $file->move(public_path($storagePath), $filename);
+            $storagePath = '/files/drivers/image';
+            $file->move(base_path($storagePath), $filename);
 
             // المسار المطلوب للتخزين في قاعدة البيانات
             $relativePath = public_path($storagePath)."/$filename";
