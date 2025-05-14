@@ -303,7 +303,8 @@ class UserApiController extends Controller
 //
 //            }
 //            $iUser->image = $relativePath;
-            return response()->api($user);
+            $u = db('users')->findRecord($iUser->id);
+            return response()->api($u);
         } catch (\Exception $e) {
             \Log::info('test', [$e->getMessage()]);
             Storage::disk('file')->append('logApi.txt', $e->getMessage());
