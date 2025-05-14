@@ -11,6 +11,7 @@ class MyUsers extends Model
         $this->table = getLang().'_users';
     }
 
+    protected $guarded = [];
     public static function find($ids, $columns = ['*']) {
         return db('users')->findRecord($ids);
     }
