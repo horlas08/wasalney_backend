@@ -97,7 +97,8 @@
 $(document).ready(function() {
     $('.assign-driver').click(function() {
         const bookingId = $(this).data('booking-id');
-        $('#assignDriverModal').modal('show');
+        // $('#assignDriverModal').modal('show');
+        $('#assignDriverModal').modal().show();
 
         // Load available drivers
         $.get(`/admin/airport/bookings/${bookingId}/available-drivers`, function(drivers) {

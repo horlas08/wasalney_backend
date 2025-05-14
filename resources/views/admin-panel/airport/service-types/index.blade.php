@@ -1,4 +1,4 @@
-@extends('admin-panel.layout.app')
+@extends('admin-panel.layout.index')
 
 @section('title', 'Airport Service Types')
 
